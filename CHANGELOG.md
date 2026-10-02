@@ -5,3 +5,9 @@ High-level, newest-first. `__version__` (package) and `__catalog_version__`
 `tests/test_catalog_versioning.py`).
 
 <!-- towncrier release notes start -->
+
+## 1.0.0 (2026-10-02)
+
+### Major
+
+- Open Source Launch
