@@ -1,0 +1,153 @@
+[project]
+name = "emergent-matter-sdm-materials"
+# IMPORTANT: this MUST stay in lockstep with __version__ and
+# __catalog_version__ in src/emergent_matter_materials/__init__.py.
+# The test `test_pyproject_version_matches_module_version` in
+# tests/test_catalog_versioning.py enforces no drift; bump all three
+# (and run `uv sync` to refresh uv.lock) when cutting a release.
+version = "0.0.0"
+description = "Unified multi-physics materials substrate for the Software Defined Matter ecosystem, covering structural, electromagnetic, thermal and manufacturing properties with per-property provenance"
+readme = "README.md"
+requires-python = ">=3.13"
+license = "Apache-2.0"
+authors = [{ name = "Emergent Matter" }]
+keywords = [
+    "materials",
+    "materials-science",
+    "electromagnetics",
+    "structural-engineering",
+    "thermal",
+    "jax",
+    "provenance",
+    "software-defined-matter",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Manufacturing",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Typing :: Typed",
+]
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/EmergentMatter/emergent-matter-sdm-materials"
+Repository = "https://github.com/EmergentMatter/emergent-matter-sdm-materials"
+Issues = "https://github.com/EmergentMatter/emergent-matter-sdm-materials/issues"
+Changelog = "https://github.com/EmergentMatter/emergent-matter-sdm-materials/blob/main/CHANGELOG.md"
+
+[project.optional-dependencies]
+jax = ["jax>=0.4"]
+dev = ["pytest>=8.0"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/emergent_matter_materials"]
+
+[tool.hatch.build]
+# An allowlist, so the sdist carries the package sources and the data files the
+# wheel ships, and nothing else: no tests, CI config, agent guidance or lock file
+# goes onto the public index.
+include = [
+    "src/emergent_matter_materials/**/*.py",
+    "src/emergent_matter_materials/py.typed",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --strict-markers --strict-config"
+filterwarnings = ["error"]
+
+[tool.mypy]
+python_version = "3.13"
+disallow_untyped_defs = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+
+[[tool.mypy.overrides]]
+module = ["jax.*"]
+ignore_missing_imports = true
+
+[dependency-groups]
+# Installed by a plain `uv sync` -- unlike [project.optional-dependencies],
+# which needs --extra/--all-extras. CI runs `uv sync --locked`, so anything
+# the test suite needs has to be declared here.
+dev = [
+    "jax>=0.10.1",
+    "pytest>=8.0",
+    # Lint. CI's `lint` job runs `uv run ruff check .`, which needs ruff in
+    # THIS group -- `uv sync --locked` installs dependency-groups, not
+    # [project.optional-dependencies]. Undeclared, that step failed with
+    # "Failed to spawn: ruff" on every run, masked by continue-on-error.
+    #
+    # The ruleset is now explicit in ruff.toml/ruff-base.toml, not implied by
+    # a pinned ruff version's defaults, so a floor specifier is safe again.
+    "ruff>=0.16",
+    "mypy>=1.14",
+]
+
+# Copy this block into your repo's pyproject.toml to opt into release control.
+# See docs/onboarding.md in EmergentMatter/actions for the full walkthrough,
+# and templates/CONTRIBUTING.md for the contributor-facing half.
+
+# ── towncrier: turns changelog.d/ notes into CHANGELOG.md ─────────────────
+#
+# Exactly three fragment types, matching the three bump levels the release
+# workflow understands (see EmergentMatter/actions CONTRACT.md). Do not add
+# a fourth type — compute_bump.py only recognizes major/minor/patch and
+# exits 1 on anything else.
+[tool.towncrier]
+directory = "changelog.d"          # where `uv run scripts/changeset.py` writes notes
+filename = "CHANGELOG.md"
+# Insert this marker into CHANGELOG.md once, above your existing history.
+# towncrier writes new release sections directly below it and never touches
+# anything beneath — see docs/onboarding.md for inserting it into a
+# hand-written changelog without disturbing prior entries.
+start_string = "<!-- towncrier release notes start -->\n"
+title_format = "## {version} ({project_date})"
+underlines = ["-", "~", "^"]
+
+[[tool.towncrier.type]]
+directory = "major"
+name = "Major"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "minor"
+name = "Minor"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "patch"
+name = "Patch"
+showcontent = true
+
+# ── em-release: tells sync_version.py every place the version string lives ──
+#
+# One entry per "path:symbol" location, beyond `[project] version` itself
+# (that one is handled separately, by `uv version --bump` in the release
+# workflow — do not list it here).
+#
+# Every location you list gets written on every release. Anything you don't
+# list is never touched — that's deliberate, so a data/schema version that
+# is meant to move independently of the package version is safe just by
+# being left off this list. See docs/onboarding.md for the
+# emergent-matter-sdm-materials worked example, where __catalog_version__ *is*
+# listed because it's meant to track the package version in lockstep.
+[tool.em-release]
+templates_version = "v1.15.0"
+tier = "open"
+version_files = [
+  "src/emergent_matter_materials/__init__.py:__version__",
+  "src/emergent_matter_materials/__init__.py:__catalog_version__",
+]
