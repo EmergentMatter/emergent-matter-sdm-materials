@@ -5,7 +5,7 @@ name = "emergent-matter-sdm-materials"
 # The test `test_pyproject_version_matches_module_version` in
 # tests/test_catalog_versioning.py enforces no drift; bump all three
 # (and run `uv sync` to refresh uv.lock) when cutting a release.
-version = "0.0.0"
+version = "1.0.0"
 description = "Unified multi-physics materials substrate for the Software Defined Matter ecosystem, covering structural, electromagnetic, thermal and manufacturing properties with per-property provenance"
 readme = "README.md"
 requires-python = ">=3.13"

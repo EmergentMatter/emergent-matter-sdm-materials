@@ -6,7 +6,7 @@ schema diagram.
 
 from __future__ import annotations
 
-__version__ = "0.0.0"
+__version__ = "1.0.0"
 
 # Data semver, bumps independently of package semver:
 #   MAJOR: schema break or material removal (downstream pinning breaks)
@@ -15,7 +15,7 @@ __version__ = "0.0.0"
 #
 # Optimization artifacts should record both: "optimized against
 # emergent-matter-sdm-materials __version__=X.Y.Z, __catalog_version__=A.B.C".
-__catalog_version__ = "0.0.0"
+__catalog_version__ = "1.0.0"
 
 
 # ── Core wrapper
