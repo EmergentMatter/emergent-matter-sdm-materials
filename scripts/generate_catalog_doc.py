@@ -229,6 +229,23 @@ def _build_material_section(s_id: str) -> str:
     out.append("")
     out.append(f"**Specification:** {m.s_specification}")
     out.append("")
+    if m.derivation is not None:
+        # A derived entry inherits everything below except its overrides;
+        # list those so a reader knows which rows are not the base's.
+        out.append(
+            f"**Derived from:** `{m.derivation.s_base_id}` "
+            f"(base catalog version {m.derivation.s_base_catalog_version})"
+        )
+        out.append("")
+        for override in m.derivation.overrides:
+            s_what = "removed" if override.value is None else type(override.value).__name__
+            s_at = (
+                f" at {override.value.d_temperature_C:g} C"
+                if hasattr(override.value, "d_temperature_C")
+                else ""
+            )
+            out.append(f"- `{override.s_path}`{s_at}: {s_what}. {override.s_reason}")
+        out.append("")
     out.append(
         f"**Category:** `{m.s_category}` &nbsp;·&nbsp; "
         f"**Catalog version:** {m.s_catalog_version} &nbsp;·&nbsp; "

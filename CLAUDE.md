@@ -41,6 +41,10 @@ group's values must also walk its table rows and flow points:
 and `scripts/generate_catalog_doc.py` already do. A walker that skips them
 lets an unsourced row ship.
 
+A downstream entry built on a catalog material uses `derive_material`
+(`derivation.py`), never a copy: inherited values stay the base's objects,
+each override carries a reason, and the derived entry always gets a new id.
+
 ## Naming conventions
 
 Shared baseline: see [STYLE.md](STYLE.md), the `d_`/`n_`/`b_`/`s_` prefix

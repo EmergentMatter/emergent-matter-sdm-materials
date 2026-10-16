@@ -141,6 +141,42 @@ thermal.table("thermal_conductivity").value_at(750.0)  # linear; raises outside 
 
 The scalar slot stays the headline value and is independent of its table. `to_jax_pytree()` flattens each table into paired arrays ready for `jnp.interp`. Note that `jnp.interp` clamps silently outside the table, where `value_at` raises; a traced solver should check the range itself.
 
+## Deriving a material from a catalog entry
+
+A downstream catalog often has better or extra data for a material this catalog already holds. `derive_material` builds a new entry from the base instead of copying it. Everything not overridden is the base's own object, so nothing is duplicated, and every override is recorded with a required reason:
+
+```python
+from emergent_matter_materials import MATERIALS, FieldOverride, PropertyTable, derive_material
+
+ours = derive_material(
+    MATERIALS["stainless_316"],
+    s_id="em_stainless_316",  # always a new id: a derived entry never shadows its base
+    # material_fingerprint() of the base when these overrides were reviewed. If the
+    # open-source entry changes, this raises and prints the new value to re-review.
+    s_expected_base_fingerprint="d6f653c71aae28e3",
+    overrides=[
+        FieldOverride(
+            "thermal.temperature_tables.thermal_conductivity",
+            PropertyTable.from_rows(
+                [(25.0, 14.0), (500.0, 19.0), (1000.0, 25.0)],
+                s_units="W/(m*K)",
+                s_source="<lab report, run, date>",
+                s_confidence="measured",
+            ),
+            s_reason="Measured on our powder lot; the base entry has no curve",
+        ),
+    ],
+    s_catalog_version="0.1.0",
+    s_last_reviewed="2026-10-16",
+)
+ours.structural is MATERIALS["stainless_316"].structural  # True: inherited, not copied
+ours.derivation.b_is_overridden("thermal.thermal_conductivity")  # False: still the base's scalar
+```
+
+An override targets a scalar slot (`"thermal.thermal_conductivity"`), the flow curve (`"structural.flow_curve"`), or a table (`"thermal.temperature_tables.<key>"`). A `PropertyTable` replaces the whole table; a `TablePoint` replaces or inserts one row and keeps every other row with its own source; a `TableRowRemoval` drops one row; `None` removes an inherited value. A removal must remove something, so a typo can't pass as an audited change. All overrides for a group are applied together and validated once by the group's own rules, so their order doesn't matter.
+
+`Material.derivation` records the base id, catalog version, and fingerprint, every override, and the base's own derivation when deriving from a derived entry, so `b_is_overridden(path)` answers across the whole chain.
+
 ## Tier 1 only: bad data is worse than no data
 
 Since v0.2.0 the catalog accepts **only primary sources**:

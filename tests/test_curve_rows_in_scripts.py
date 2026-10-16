@@ -94,3 +94,45 @@ def test_validation_manifest_has_one_row_per_curve_point(monkeypatch):
         "thermal_expansion@500.0C",
     ]
     assert {r["s_condition"] for r in rows} == {"annealed, dilatometer", "as-built, XY"}
+
+
+def test_catalog_doc_lists_a_derived_materials_base_and_overrides(monkeypatch):
+    from emergent_matter_materials import (
+        FieldOverride,
+        TablePoint,
+        derive_material,
+        material_fingerprint,
+    )
+
+    base = _probe_material()
+    derived = derive_material(
+        base,
+        s_id="curve_probe_derived",
+        s_expected_base_fingerprint=material_fingerprint(base),
+        overrides=[
+            FieldOverride(
+                "thermal.temperature_tables.thermal_expansion",
+                TablePoint(
+                    500.0,
+                    PropertyTable.from_rows(
+                        [(500.0, 1.45e-5)],
+                        s_units="1/K",
+                        s_source="Probe rerun",
+                        s_confidence="measured",
+                    )
+                    .points[0]
+                    .value,
+                ),
+                "Rerun with a calibrated push rod",
+            )
+        ],
+        s_catalog_version="0.1.0",
+        s_last_reviewed="2026-10-16",
+    )
+    monkeypatch.setitem(MATERIALS, derived.s_id, derived)
+    s_section = _load_script("generate_catalog_doc")._build_material_section(derived.s_id)
+    assert f"**Derived from:** `{_PROBE_ID}`" in s_section
+    assert (
+        "- `thermal.temperature_tables.thermal_expansion` at 500 C: TablePoint. "
+        "Rerun with a calibrated push rod"
+    ) in s_section

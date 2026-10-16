@@ -41,6 +41,13 @@ from emergent_matter_materials.bh_curve import BHCurveData
 # ── Auto-load catalog at import time so MATERIALS is ready for consumers
 from emergent_matter_materials.catalog._loader import load_all as _load_catalog
 from emergent_matter_materials.crystal_anisotropy import CrystalAnisotropy
+from emergent_matter_materials.derivation import (
+    Derivation,
+    FieldOverride,
+    TableRowRemoval,
+    derive_material,
+    material_fingerprint,
+)
 from emergent_matter_materials.electromagnetic import Electromagnetic
 from emergent_matter_materials.flow_curve import FlowCurve, FlowPoint
 from emergent_matter_materials.manufacturing import Manufacturing, ProcessFit
@@ -89,7 +96,9 @@ __all__ = [
     "ConfidenceLevel",
     "CoverageReport",
     "CrystalAnisotropy",
+    "Derivation",
     "Electromagnetic",
+    "FieldOverride",
     "FlowCurve",
     "FlowPoint",
     "Manufacturing",
@@ -109,10 +118,12 @@ __all__ = [
     "StructuralStrength",
     "StructuralStrengthUnavailable",
     "TablePoint",
+    "TableRowRemoval",
     "Thermal",
     "__catalog_version__",
     "__version__",
     "coverage",
+    "derive_material",
     # Helpers
     "expected_units_for",
     "get",
@@ -122,6 +133,7 @@ __all__ = [
     "list_aliases",
     "list_materials",
     "list_properties",
+    "material_fingerprint",
     "material_summary",
     "register_material",
 ]
