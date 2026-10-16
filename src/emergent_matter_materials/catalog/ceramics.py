@@ -23,6 +23,10 @@ from emergent_matter_materials.material import Material
 from emergent_matter_materials.property_value import PropertyValue as _PV
 from emergent_matter_materials.structural import Structural
 from emergent_matter_materials.thermal import Thermal
+_COORSTEK_CHART_J = (
+    "CoorsTek 'Ceramic Material Properties' chart 8510-1042 Rev. J (c) 2008, copy retrieved 2026-10-16 "
+    'from https://psec.uchicago.edu/ceramics/CoorsTek%208510-1042_Ceramic_Material_Properties.pdf (hosted by UChicago)'
+)
 
 _S_CATALOG_VERSION = "1.0.0"
 _S_LAST_REVIEWED = "2026-09-17"
@@ -130,6 +134,14 @@ alumina_ad96 = Material(
         ),
     ),
     thermal=Thermal(
+        max_operating_temp=_PV(
+            d_value=1700.0,
+            s_units='C',
+            s_source=_COORSTEK_CHART_J + " -- Maximum Use Temperature, no-load condition, AD-96 column: 1700 C",
+            s_condition='no load',
+            s_confidence='datasheet',
+            s_notes='Older chart revision; the current CoorsTek Advanced Alumina sheet (2023) leaves this row out.',
+        ),
         thermal_conductivity=_PV(
             d_value=24.7,
             s_units="W/(m*K)",

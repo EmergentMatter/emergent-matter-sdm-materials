@@ -148,6 +148,16 @@ from emergent_matter_materials.property_value import PropertyValue as _PV
 from emergent_matter_materials.steinmetz import SteinmetzData as _Steinmetz
 from emergent_matter_materials.structural import Structural
 from emergent_matter_materials.thermal import Thermal
+_METGLAS_SDS = (
+    "Metglas Inc. Safety Data Sheet '2605 SA1, 2605 HB1M, 2605 SC and HB1M-LL', Version 1.01, revised "
+    '03/12/2021, Section 9, retrieved 2026-10-16 from https://metglas.com/wp-content/uploads/2021/03/'
+    '2605-SA1-2605-HB1M-2605-SC-and-HB1M-LL_SDSFinal.pdf'
+)
+_VAC_VITROPERM_PAGE = (
+    "VACUUMSCHMELZE web page 'Nanocrystalline Material - VITROPERM', Physical Properties table, "
+    'retrieved 2026-10-16 from https://vacuumschmelze.com/products/soft-magnetic-materials-and-stamped-parts/'
+    'nanocrystalline-material-vitroperm'
+)
 
 _S_CATALOG_VERSION = "1.0.0"
 
@@ -1829,6 +1839,14 @@ metglas_2605sa1 = Material(
         ),
     ),
     thermal=Thermal(
+        melting_temp=_PV(
+            d_value=1180.0,
+            s_units='C',
+            s_source=_METGLAS_SDS + " -- Melting point 1180 C (2156 F)",
+            s_condition='SDS Section 9',
+            s_confidence='datasheet',
+            s_notes='One value for the four alloys on the SDS, not 2605SA1 alone. Crystallization temperature 510 C (Metglas 2605SA1 technical bulletin, 2011); the amorphous structure is lost above it.',
+        ),
         curie_temp=_PV(
             d_value=399.0,
             s_units="C",
@@ -1931,6 +1949,14 @@ vitroperm_500f = Material(
     s_catalog_version=_S_CATALOG_VERSION,
     s_last_reviewed=_S_LAST_REVIEWED,
     structural=Structural(
+        youngs_modulus=_PV(
+            d_value=150000000000.0,
+            s_units='Pa',
+            s_source=_VAC_VITROPERM_PAGE + " -- VITROPERM 500/800 Young's Modulus E 150 GPa",
+            s_condition='VITROPERM 500/800 family row',
+            s_confidence='datasheet',
+            s_notes='The row covers the 500/800 family, not 500 F alone.',
+        ),
         density=_PV(
             d_value=7350.0,
             s_units="kg/m^3",
