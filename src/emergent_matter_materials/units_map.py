@@ -49,6 +49,8 @@ _PROPERTY_EXPECTED_UNITS: dict[str, str] = {
     "density":                   "kg/m^3",
     "hardness_vickers":          "HV",          # Vickers hardness number (kgf/mm^2), reported unitless by convention  # noqa: E501
     "compressive_strength":      "Pa",          # compressive envelope (brittle sintered magnets)
+    "stress_relaxation_temp":    "C",           # residual stress fully relaxed above this
+    "flow_stress":               "Pa",          # FlowPoint.stress in a FlowCurve (not a group slot)
     # ── Electromagnetic ───────────────────────────────────────────────
     "resistivity_at_20C":        "Ohm*m",
     "temp_coeff_resistivity":    "1/K",
@@ -72,6 +74,9 @@ _PROPERTY_EXPECTED_UNITS: dict[str, str] = {
     "glass_transition":          "C",
     "curie_temp":                "C",
     "melting_temp":              "C",
+    "solidus_temp":              "C",
+    "liquidus_temp":             "C",
+    "latent_heat_fusion":        "J/kg",
     "emissivity":                "",            # dimensionless
     # ── Manufacturing (per-ProcessFit) ────────────────────────────────
     "shrinkage_linear":          "",            # dimensionless fraction

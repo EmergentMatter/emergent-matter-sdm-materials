@@ -90,7 +90,11 @@ Not every property is populated on every material: group fields are `Optional`, 
 ```
 PropertyValue   (value + units + source + condition + confidence + notes)
     ▲
-    │  composes
+    │  composes (one per scalar slot, one per table row, one per flow point)
+    │
+PropertyTable (temperature -> PropertyValue rows)  |  FlowCurve (temperature, plastic strain -> stress)
+    ▲
+    │  attach to
     │
 Structural | Electromagnetic | Thermal | Manufacturing | CrystalAnisotropy
     ▲
@@ -108,6 +112,34 @@ time. Adding a family means adding a module there; the directory listing is
 the index of what exists.
 
 Every numeric property is a `PropertyValue`, never a bare float. Convenience accessors (`d_youngs_modulus_Pa`, `d_density_kg_m3`, ...) on each group return bare floats for solver hot paths.
+
+## Temperature-dependent data
+
+Thermal and thermo-mechanical solvers need a property across a temperature range, not at one condition. `Structural`, `Thermal`, and `Electromagnetic` each carry a `temperature_tables` mapping, keyed by the scalar slot a table extends:
+
+```python
+from emergent_matter_materials import PropertyTable, Thermal
+
+thermal = Thermal(
+    temperature_tables={
+        "thermal_conductivity": PropertyTable.from_rows(
+            [(25.0, 11.4), (500.0, 18.3), (1000.0, 25.9)],  # (C, W/(m*K))
+            s_units="W/(m*K)",
+            s_source="<vendor TDS, revision, table>",
+            s_confidence="datasheet",
+        ),
+    }
+)
+thermal.table("thermal_conductivity").value_at(750.0)  # linear; raises outside 25-1000 C
+```
+
+- **Provenance is per point.** Each row is a full `PropertyValue`, because the rows of one curve often come from different tests (a room-temperature tensile test and a high-temperature resonance test, say). `from_rows` stamps one source on every row; build `TablePoint`s directly when rows differ. Every provenance gate scans every row.
+- **The slot's rules apply to every row.** A table key must be a property of its group that can vary with temperature (not a temperature itself, like `melting_temp`), in that property's units, and each row must pass the scalar slot's range check (emissivity in [0, 1], positive conductivity, ...). Resistivity is tabulated under the key `"resistivity"`.
+- **Secant tables declare it.** A mean coefficient of thermal expansion (CTE), or a mean specific heat, measured from a reference temperature sets `d_reference_temperature_C`; no other property accepts one. `bracket_at(T)` returns the rows an interpolated value came from, for citing both.
+- **Plasticity is a `FlowCurve`** on `Structural.flow_curve`: flow stress against equivalent plastic strain, one isotherm per temperature (and per strain rate, for rate-dependent data), each point sourced. The curve states whether it holds true or engineering stress-strain, or `"unspecified"` when the source doesn't say.
+- **Melting range and process-simulation scalars**: `Thermal.solidus_temp`, `Thermal.liquidus_temp`, `Thermal.latent_heat_fusion`, and `Structural.stress_relaxation_temp`.
+
+The scalar slot stays the headline value and is independent of its table. `to_jax_pytree()` flattens each table into paired arrays ready for `jnp.interp`. Note that `jnp.interp` clamps silently outside the table, where `value_at` raises; a traced solver should check the range itself.
 
 ## Tier 1 only: bad data is worse than no data
 

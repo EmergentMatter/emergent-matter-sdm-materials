@@ -53,6 +53,7 @@ _FIELD_ORDER = {
         "fatigue_endurance",
         "density",
         "hardness_vickers",
+        "stress_relaxation_temp",
     ),
     "electromagnetic": (
         "resistivity_at_20C",
@@ -76,6 +77,9 @@ _FIELD_ORDER = {
         "glass_transition",
         "curie_temp",
         "melting_temp",
+        "solidus_temp",
+        "liquidus_temp",
+        "latent_heat_fusion",
         "emissivity",
     ),
     "crystal_anisotropy": (
@@ -117,26 +121,51 @@ def _format_value(pv: PropertyValue) -> str:
     return f"{s_num} {s_units}"
 
 
-def _format_property_row(s_field: str, pv: PropertyValue) -> str:
-    """One markdown table row for a single PropertyValue.
+def _source_head(pv: PropertyValue) -> str:
+    """The document-identifier head of ``s_source``, escaped for a markdown cell.
 
-    Columns: property | value+units | condition | confidence | source.
-    Source is the FIRST line of s_source (after stripping " -- ..." trailing
-    citation-detail) to keep the table readable; the full s_source lives
-    in the Python catalog files.
+    Keeps everything before " -- " (our convention for separating citation
+    from value detail), else the first 140 chars, with whitespace collapsed.
+    The full s_source lives in the Python catalog files.
     """
-    s_value = _format_value(pv)
-    s_condition = pv.s_condition.replace("|", "\\|") if pv.s_condition else ""
-    s_confidence = pv.s_confidence
-    # Source: keep the document-identifier portion (everything before " -- ",
-    # which is our convention for separating citation from value detail).
-    # If no " -- " separator, take first 140 chars. Collapse whitespace.
     s_source = pv.s_source.split(" -- ")[0].strip()
     s_source = " ".join(s_source.split())  # collapse \n + multi-space
     if len(s_source) > 140:
         s_source = s_source[:137].rstrip() + "..."
-    s_source = s_source.replace("|", "\\|")
-    return f"| `{s_field}` | {s_value} | {s_condition} | `{s_confidence}` | {s_source} |"
+    return s_source.replace("|", "\\|")
+
+
+def _format_property_row(s_field: str, pv: PropertyValue) -> str:
+    """One markdown table row for a single PropertyValue.
+
+    Columns: property | value+units | condition | confidence | source.
+    """
+    s_value = _format_value(pv)
+    s_condition = pv.s_condition.replace("|", "\\|") if pv.s_condition else ""
+    s_confidence = pv.s_confidence
+    return f"| `{s_field}` | {s_value} | {s_condition} | `{s_confidence}` | {_source_head(pv)} |"
+
+
+def _iter_curve_points(group_obj):
+    """Yield (s_label, s_at, PropertyValue) for every temperature-table row and flow point.
+
+    ``s_label`` names the slot (or ``flow_curve``); ``s_at`` is where the
+    point sits, rendered for a table cell.
+    """
+    for s_slot, table in getattr(group_obj, "temperature_tables", {}).items():
+        s_label = s_slot
+        if table.d_reference_temperature_C is not None:
+            s_label = f"{s_slot} (secant from {table.d_reference_temperature_C:g} C)"
+        for point in table.points:
+            yield s_label, f"{point.d_temperature_C:g} C", point.value
+    flow_curve = getattr(group_obj, "flow_curve", None)
+    if flow_curve is not None:
+        s_label = f"flow_curve ({flow_curve.s_stress_strain_measure} stress-strain)"
+        for point in flow_curve.points:
+            s_at = f"{point.d_temperature_C:g} C, plastic strain {point.d_plastic_strain:g}"
+            if point.d_strain_rate_per_s is not None:
+                s_at += f", {point.d_strain_rate_per_s:g} 1/s"
+            yield s_label, s_at, point.stress
 
 
 def _iter_group_fields(group_obj, s_group_name: str):
@@ -214,15 +243,16 @@ def _build_material_section(s_id: str) -> str:
         if group_obj is None:
             continue
         rows = list(_iter_group_fields(group_obj, s_group_name))
-        if rows:
-            populated_groups.append((s_group_name, rows))
+        curve_rows = list(_iter_curve_points(group_obj))
+        if rows or curve_rows:
+            populated_groups.append((s_group_name, rows, curve_rows))
 
     if not populated_groups:
         out.append("*(No populated property groups: all Tier-1 sources still TODO.)*")
         out.append("")
         return "\n".join(out)
 
-    for s_group_name, rows in populated_groups:
+    for s_group_name, rows, curve_rows in populated_groups:
         out.append(f"#### {s_group_name.replace('_', ' ').title()}")
         out.append("")
         # Surface non-PropertyValue group-level metadata where useful.
@@ -257,11 +287,26 @@ def _build_material_section(s_id: str) -> str:
                     f"design allowable `get_structural_strength()` returns"
                 )
             out.append("")
-        out.append("| Property | Value | Condition | Confidence | Source (head) |")
-        out.append("|---|---|---|---|---|")
-        for s_field, pv in rows:
-            out.append(_format_property_row(s_field, pv))
-        out.append("")
+        if rows:
+            out.append("| Property | Value | Condition | Confidence | Source (head) |")
+            out.append("|---|---|---|---|---|")
+            for s_field, pv in rows:
+                out.append(_format_property_row(s_field, pv))
+            out.append("")
+        if curve_rows:
+            # Each row is its own PropertyValue with its own source, so the
+            # table lists provenance per point rather than once per curve.
+            out.append("**Temperature-dependent data**")
+            out.append("")
+            out.append("| Property | At | Value | Condition | Confidence | Source (head) |")
+            out.append("|---|---|---|---|---|---|")
+            for s_label, s_at, pv in curve_rows:
+                s_condition = pv.s_condition.replace("|", "\\|")
+                out.append(
+                    f"| `{s_label}` | {s_at} | {_format_value(pv)} | {s_condition} | "
+                    f"`{pv.s_confidence}` | {_source_head(pv)} |"
+                )
+            out.append("")
 
     return "\n".join(out)
 
@@ -280,6 +325,11 @@ def _build_summary_stats() -> str:
             if group_obj is None:
                 continue
             for _, pv in _iter_group_fields(group_obj, s_group):
+                confidence_counts[pv.s_confidence] += 1
+                n_pv += 1
+            # Table rows and flow points are PropertyValues too; counting
+            # them keeps the Tier-1 share honest once curves ship.
+            for _, _, pv in _iter_curve_points(group_obj):
                 confidence_counts[pv.s_confidence] += 1
                 n_pv += 1
 

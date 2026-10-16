@@ -32,6 +32,7 @@ optimization needs the disambiguator, not a coin flip.
 from __future__ import annotations
 
 import dataclasses
+from collections.abc import Mapping
 from typing import TYPE_CHECKING, TypedDict
 
 from emergent_matter_materials.property_value import PropertyValue
@@ -171,6 +172,7 @@ _PROPERTY_MAP: dict[str, tuple[str, str]] = {
     "sigma_f":      ("structural", "fatigue_endurance"),
     "sigma_c":      ("structural", "compressive_strength"),
     "HV":           ("structural", "hardness_vickers"),
+    "T_relax":      ("structural", "stress_relaxation_temp"),
     # ── Electromagnetic
     "resistivity":  ("electromagnetic", "resistivity_at_20C"),
     "alpha_rho":    ("electromagnetic", "temp_coeff_resistivity"),
@@ -194,6 +196,9 @@ _PROPERTY_MAP: dict[str, tuple[str, str]] = {
     "T_g":          ("thermal", "glass_transition"),
     "T_c":          ("thermal", "curie_temp"),
     "T_melt":       ("thermal", "melting_temp"),
+    "T_solidus":    ("thermal", "solidus_temp"),
+    "T_liquidus":   ("thermal", "liquidus_temp"),
+    "L_fusion":     ("thermal", "latent_heat_fusion"),
     "emissivity":   ("thermal", "emissivity"),
     # ── Crystal anisotropy (v0.4.0)
     "C11":          ("crystal_anisotropy", "c11"),
@@ -454,8 +459,10 @@ def coverage(material: str | Material) -> CoverageReport:
                 fields_cov[f.name] = val is not None  # scalar PV slot
             elif isinstance(val, str):
                 continue  # metadata, not a data slot
-            elif isinstance(val, (tuple, list, dict)):
-                composites[f.name] = len(val)  # collection composite -> count
+            elif isinstance(val, (tuple, list, Mapping)):
+                # Collection composite -> count. Mapping, not dict: groups
+                # store temperature_tables as a read-only PropertyTableMap.
+                composites[f.name] = len(val)
             else:
                 composites[f.name] = val is not None  # singular composite -> present?
 

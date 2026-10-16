@@ -40,11 +40,15 @@ JAX installed pay no import cost.
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from dataclasses import fields
 from typing import TYPE_CHECKING, Any, Literal, get_args
 
+from emergent_matter_materials.flow_curve import FlowCurve
+
 if TYPE_CHECKING:
     from emergent_matter_materials.material import Material
+    from emergent_matter_materials.property_table import PropertyTable
 
 
 MissingPolicy = Literal["omit", "nan", "error"]
@@ -132,6 +136,27 @@ def to_jax_pytree(
                     continue
                 # s_missing == "nan"
                 group_dict[f.name] = jnp.nan
+            elif isinstance(pv, Mapping):
+                # temperature_tables: slot name -> PropertyTable. Each table
+                # becomes paired ascending arrays, the shape jnp.interp takes.
+                # An empty mapping is "no tables", not a missing value, so it
+                # contributes nothing under every policy (same as the empty
+                # rotational_loss_models tuple below).
+                if pv:
+                    group_dict[f.name] = {
+                        s_key: _table_subtree(table, jnp) for s_key, table in pv.items()
+                    }
+            elif isinstance(pv, FlowCurve):
+                flow: dict[str, Any] = {
+                    "d_temperatures_C": jnp.asarray([p.d_temperature_C for p in pv.points]),
+                    "d_plastic_strains": jnp.asarray([p.d_plastic_strain for p in pv.points]),
+                    "d_stresses_Pa": jnp.asarray([p.stress.d_value for p in pv.points]),
+                }
+                if pv.b_is_rate_dependent:
+                    flow["d_strain_rates_per_s"] = jnp.asarray(
+                        [p.d_strain_rate_per_s for p in pv.points]
+                    )
+                group_dict[f.name] = flow
             elif isinstance(pv, (tuple, list)):
                 # Collection-valued composite field, e.g.
                 # Electromagnetic.rotational_loss_models (tuple of
@@ -163,6 +188,17 @@ def to_jax_pytree(
         if group_dict:
             out[s_group_name] = group_dict
 
+    return out
+
+
+def _table_subtree(table: PropertyTable, jnp: Any) -> dict[str, Any]:
+    """Flatten one PropertyTable into arrays (plus its reference temperature if secant)."""
+    out: dict[str, Any] = {
+        "d_temperatures_C": jnp.asarray(table.d_temperatures_C),
+        "d_values": jnp.asarray(table.d_values),
+    }
+    if table.d_reference_temperature_C is not None:
+        out["d_reference_temperature_C"] = jnp.asarray(table.d_reference_temperature_C)
     return out
 
 

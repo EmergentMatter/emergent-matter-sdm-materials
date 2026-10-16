@@ -42,10 +42,12 @@ from emergent_matter_materials.bh_curve import BHCurveData
 from emergent_matter_materials.catalog._loader import load_all as _load_catalog
 from emergent_matter_materials.crystal_anisotropy import CrystalAnisotropy
 from emergent_matter_materials.electromagnetic import Electromagnetic
+from emergent_matter_materials.flow_curve import FlowCurve, FlowPoint
 from emergent_matter_materials.manufacturing import Manufacturing, ProcessFit
 
 # ── Composite type
 from emergent_matter_materials.material import Material, MaterialCategory
+from emergent_matter_materials.property_table import PropertyTable, PropertyTableMap, TablePoint
 from emergent_matter_materials.property_value import (
     ConfidenceLevel,
     PropertyValue,
@@ -88,11 +90,15 @@ __all__ = [
     "CoverageReport",
     "CrystalAnisotropy",
     "Electromagnetic",
+    "FlowCurve",
+    "FlowPoint",
     "Manufacturing",
     # Composite
     "Material",
     "MaterialCategory",
     "ProcessFit",
+    "PropertyTable",
+    "PropertyTableMap",
     "PropertyValue",
     "RotationalLossData",
     "RotationalLossForm",
@@ -102,6 +108,7 @@ __all__ = [
     # Structural strength resolver (v1.10.0)
     "StructuralStrength",
     "StructuralStrengthUnavailable",
+    "TablePoint",
     "Thermal",
     "__catalog_version__",
     "__version__",

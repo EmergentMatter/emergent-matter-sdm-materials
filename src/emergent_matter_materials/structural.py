@@ -36,14 +36,52 @@ separately because the right stress metric is context-dependent:
 
 Each value carries its own citation via the PropertyValue's
 ``s_source``, so a consumer can reason about provenance per-metric.
+
+Temperature dependence of any slot lives in ``temperature_tables`` (see
+``property_table``), and plastic hardening in ``flow_curve`` (see
+``flow_curve``). The scalar slots stay the headline values.
 """
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from collections.abc import Mapping
+from dataclasses import dataclass, field
+from types import MappingProxyType
 
+from emergent_matter_materials.flow_curve import FlowCurve
+from emergent_matter_materials.property_table import (
+    PropertyTable,
+    PropertyTableMap,
+    _require_table,
+)
 from emergent_matter_materials.property_value import PropertyValue
-from emergent_matter_materials.validation import _validate_group_units
+from emergent_matter_materials.validation import (
+    _normalize_temperature_tables,
+    _validate_group_units,
+)
+
+#: The PropertyValue slots of ``Structural``, unit-checked on construction.
+_STRUCTURAL_SCALAR_FIELDS: frozenset[str] = frozenset(
+    {
+        "youngs_modulus",
+        "poisson_ratio",
+        "yield_stress",
+        "fatigue_endurance",
+        "ultimate_tensile",
+        "flexural_strength",
+        "density",
+        "hardness_vickers",
+        "compressive_strength",
+        "stress_relaxation_temp",
+    }
+)
+
+#: Valid ``temperature_tables`` keys, each mapped to the slot it borrows units
+#: and range checks from. ``stress_relaxation_temp`` is itself a temperature,
+#: so tabulating it against temperature is meaningless.
+_STRUCTURAL_TABLE_SLOTS: Mapping[str, str] = MappingProxyType(
+    {s: s for s in _STRUCTURAL_SCALAR_FIELDS - {"stress_relaxation_temp"}}
+)
 
 
 class StructuralStrengthUnavailable(ValueError):
@@ -123,23 +161,33 @@ class Structural:
     # flexural_strength but carry a far higher load in pure compression; this
     # is the compressive envelope for press-fit and interference sizing.
     compressive_strength: PropertyValue | None = None
+    # C. Thermo-mechanical process simulation treats accumulated residual
+    # stress as fully relaxed above this temperature (annealing / creep
+    # relief). A solver input, not a strength.
+    stress_relaxation_temp: PropertyValue | None = None
+    # Flow stress vs plastic strain, per temperature. See flow_curve.py.
+    flow_curve: FlowCurve | None = None
+    # Temperature dependence of the scalar slots above, keyed by slot name
+    # (e.g. "youngs_modulus"). See property_table.py.
+    temperature_tables: Mapping[str, PropertyTable] = field(default_factory=PropertyTableMap)
 
     def __post_init__(self) -> None:
         _validate_group_units(
             self,
-            group_fields={
-                "youngs_modulus",
-                "poisson_ratio",
-                "yield_stress",
-                "fatigue_endurance",
-                "ultimate_tensile",
-                "flexural_strength",
-                "density",
-                "hardness_vickers",
-                "compressive_strength",
-            },
+            group_fields=_STRUCTURAL_SCALAR_FIELDS,
             b_optional=True,
         )
+        _normalize_temperature_tables(self, _STRUCTURAL_TABLE_SLOTS)
+        if self.flow_curve is not None and not isinstance(self.flow_curve, FlowCurve):
+            raise TypeError(
+                f"Structural.flow_curve must be a FlowCurve, got {type(self.flow_curve).__name__}"
+            )
+        pv_relax = self.stress_relaxation_temp
+        if pv_relax is not None and pv_relax.d_value < -273.15:
+            raise ValueError(
+                f"Structural.stress_relaxation_temp = {pv_relax.d_value} C "
+                f"is below absolute zero; check the source citation."
+            )
 
         # Poisson ratio physical range (only if present)
         if self.poisson_ratio is not None and not (0.0 < self.poisson_ratio.d_value < 0.5):
@@ -173,6 +221,24 @@ class Structural:
                 f"ultimate_tensile ({self.ultimate_tensile.d_value} Pa). "
                 f"This is physically impossible; check the source citations."
             )
+
+        # The same ordering at every temperature both tables share. The
+        # per-row checks in _normalize_temperature_tables see one table at
+        # a time, so this cross-table invariant has to live here.
+        tables = self.temperature_tables
+        if "yield_stress" in tables and "ultimate_tensile" in tables:
+            uts_by_T = {
+                p.d_temperature_C: p.value.d_value
+                for p in self.temperature_tables["ultimate_tensile"].points
+            }
+            for p in self.temperature_tables["yield_stress"].points:
+                d_uts = uts_by_T.get(p.d_temperature_C)
+                if d_uts is not None and p.value.d_value > d_uts:
+                    raise ValueError(
+                        f"Structural.temperature_tables: yield_stress ({p.value.d_value} Pa) > "
+                        f"ultimate_tensile ({d_uts} Pa) at {p.d_temperature_C} C. "
+                        f"This is physically impossible; check the source citations."
+                    )
 
     # ── Solver-hot-path numeric accessors (raise on missing)
 
@@ -220,6 +286,14 @@ class Structural:
     @property
     def d_compressive_strength_Pa(self) -> float:
         return self._req("compressive_strength").d_value
+
+    @property
+    def d_stress_relaxation_temp_C(self) -> float:
+        return self._req("stress_relaxation_temp").d_value
+
+    def table(self, s_field_name: str) -> PropertyTable:
+        """The temperature table for a scalar slot; raises if none is attached."""
+        return _require_table(self, s_field_name)
 
     # ── Consumer-safe design-strength resolution (added v1.10.0)
 
