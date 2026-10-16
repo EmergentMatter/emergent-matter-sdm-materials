@@ -2,30 +2,30 @@
 
 **This document is auto-generated. Edit the Python catalog files, then regenerate with `uv run python scripts/generate_catalog_doc.py`. Do not hand-edit this file.**
 
-_Last generated: 2026-10-02 21:34 UTC_
+_Last generated: 2026-10-16 19:44 UTC_
 
 ---
 
 ## Summary
 
-**Catalog version:** `2.0.1` &nbsp;·&nbsp; **Package version:** `2.0.1`
+**Catalog version:** `1.0.0` &nbsp;·&nbsp; **Package version:** `1.0.0`
 
-**37 materials** &nbsp;·&nbsp; **433 PropertyValues** &nbsp;·&nbsp; **100% Tier 1**
+**38 materials** &nbsp;·&nbsp; **459 PropertyValues** &nbsp;·&nbsp; **100% Tier 1**
 
 **Confidence breakdown:**
 
 | `s_confidence` | Count | Share |
 |---|---:|---:|
-| `measured` | 8 | 1.8% |
-| `datasheet` | 298 | 68.8% |
-| `standard` | 127 | 29.3% |
+| `measured` | 8 | 1.7% |
+| `datasheet` | 317 | 69.1% |
+| `standard` | 134 | 29.2% |
 
 **By category:**
 
 | Category | Count |
 |---|---:|
 | `ceramic` | 2 |
-| `elastomer` | 1 |
+| `elastomer` | 2 |
 | `magnet` | 8 |
 | `metal` | 9 |
 | `polymer` | 10 |
@@ -72,6 +72,7 @@ _Last generated: 2026-10-02 21:34 UTC_
 | `steel_4140` | metal | AISI 4140, normalized at 870 C (1600 F), air cooled, 25 mm (1 in.) round |
 | `stycast_2850ft` | polymer | LOCTITE STYCAST 2850FT (alumina-filled epoxy, black) with LOCTITE CAT 9, mixed 100:3.5... |
 | `titanium_6al_4v` | metal | ASTM B348 Grade 5 / Ti-6Al-4V, annealed |
+| `tpu_95a_hf_bambu` | elastomer | Bambu Lab TPU 95A HF, 1.75 mm FDM filament; typical values on FDM-printed, 100% infill... |
 | `tpu_elastollan_1195a` | elastomer | BASF Elastollan 1195 A 10 (11 Series polyether TPU, cylindrical granules, no lubricant)... |
 | `vitroperm_500f` | soft_magnetic | Vacuumschmelze VITROPERM 500 F nanocrystalline ribbon (Fe73.5Cu1Nb3Si13.5B9 / FINEMET-c... |
 
@@ -151,7 +152,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 **Specification:** MARUWA AlN substrate grade AN-170 (gray), 0.25-1.5 mm thickness, per the MARUWA AlN substrates characteristic-values table
 
-**Category:** `ceramic` &nbsp;·&nbsp; **Catalog version:** 1.12.0 &nbsp;·&nbsp; **Last reviewed:** 2026-09-17
+**Category:** `ceramic` &nbsp;·&nbsp; **Catalog version:** 1.0.0 &nbsp;·&nbsp; **Last reviewed:** 2026-09-17
 
 #### Structural
 
@@ -186,7 +187,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 **Specification:** CoorsTek AD-96, nominal 96% Al2O3 sintered alumina (white), per the CoorsTek Advanced Alumina properties table
 
-**Category:** `ceramic` &nbsp;·&nbsp; **Catalog version:** 1.12.0 &nbsp;·&nbsp; **Last reviewed:** 2026-09-17
+**Category:** `ceramic` &nbsp;·&nbsp; **Catalog version:** 1.0.0 &nbsp;·&nbsp; **Last reviewed:** 2026-09-17
 
 #### Structural
 
@@ -214,11 +215,36 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 |---|---|---|---|---|
 | `thermal_conductivity` | 24.7 W/(m*K) | 20 C | `datasheet` | CoorsTek, 'Advanced Alumina: Materials & Manufacturing Processes' brochure ((c) 2023 CoorsTek, document code 01023 L), properties table,... |
 | `specific_heat` | 880.0 J/(kg*K) | 100 C | `datasheet` | CoorsTek, 'Advanced Alumina: Materials & Manufacturing Processes' brochure ((c) 2023 CoorsTek, document code 01023 L), properties table,... |
+| `max_operating_temp` | 1700.0 C | no load | `datasheet` | CoorsTek 'Ceramic Material Properties' chart 8510-1042 Rev. J (c) 2008, copy retrieved 2026-10-16 from https://psec.uchicago.edu/ceramics... |
 | `thermal_expansion` | 8.200e-06 1/K | 25-1000 C mean | `datasheet` | CoorsTek, 'Advanced Alumina: Materials & Manufacturing Processes' brochure ((c) 2023 CoorsTek, document code 01023 L), properties table,... |
 
 ---
 
 ### Category: `elastomer`
+
+### `tpu_95a_hf_bambu`
+
+**Description:** Bambu Lab TPU 95A HF: FDM-printed Shore 95A thermoplastic polyurethane filament
+
+**Specification:** Bambu Lab TPU 95A HF, 1.75 mm FDM filament; typical values on FDM-printed, 100% infill specimens per the Bambu TDS V1.0
+
+**Category:** `elastomer` &nbsp;·&nbsp; **Catalog version:** 1.0.0 &nbsp;·&nbsp; **Last reviewed:** 2026-10-16
+
+#### Structural
+
+**Strength basis:** `ultimate_tensile` &nbsp;·&nbsp; 27.3 MPa &nbsp;·&nbsp; the design allowable `get_structural_strength()` returns
+
+| Property | Value | Condition | Confidence | Source (head) |
+|---|---|---|---|---|
+| `youngs_modulus` | 9.800e+06 Pa | X-Y (flat) print direction, ISO 527, printed specimen, dried 70 C 12 h | `datasheet` | Bambu Lab, 'Bambu Filament Technical Data Sheet V1.0: TPU 95A HF', retrieved 2026-10-16 from https://store.bblcdn.eu/s8/default/16df21baf... |
+| `ultimate_tensile` | 2.730e+07 Pa | X-Y (flat) print direction, ISO 527, printed specimen | `datasheet` | Bambu Lab, 'Bambu Filament Technical Data Sheet V1.0: TPU 95A HF', retrieved 2026-10-16 from https://store.bblcdn.eu/s8/default/16df21baf... |
+| `density` | 1220.0 kg/m^3 | ISO 1183 | `datasheet` | Bambu Lab, 'Bambu Filament Technical Data Sheet V1.0: TPU 95A HF', retrieved 2026-10-16 from https://store.bblcdn.eu/s8/default/16df21baf... |
+
+#### Thermal
+
+| Property | Value | Condition | Confidence | Source (head) |
+|---|---|---|---|---|
+| `melting_temp` | 183.0 C | DSC, 10 C/min | `datasheet` | Bambu Lab, 'Bambu Filament Technical Data Sheet V1.0: TPU 95A HF', retrieved 2026-10-16 from https://store.bblcdn.eu/s8/default/16df21baf... |
 
 ### `tpu_elastollan_1195a`
 
@@ -237,6 +263,12 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 | `ultimate_tensile` | 5.500e+07 Pa | 23 C, DIN 53504 S2 specimen, injection moulded | `datasheet` | BASF Polyurethanes GmbH, 'Thermoplastic Polyurethane Elastomers (TPU) Elastollan - Product Range' brochure (September 2016), 'Elastollan... |
 | `density` | 1150.0 kg/m^3 | 23 C, DIN EN ISO 1183-1-A | `datasheet` | BASF Polyurethanes GmbH, 'Thermoplastic Polyurethane Elastomers (TPU) Elastollan - Product Range' brochure (September 2016), 'Elastollan... |
 
+#### Thermal
+
+| Property | Value | Condition | Confidence | Source (head) |
+|---|---|---|---|---|
+| `thermal_conductivity` | 0.3 W/(m*K) | 23 C, DIN 52612-1, specimens tempered 20 h at 100 C | `datasheet` | BASF 'Elastollan - Physical Properties' (extract of the Material Properties brochure, p.31, undated), retrieved 2026-10-16 from https://w... |
+
 ---
 
 ### Category: `magnet`
@@ -247,7 +279,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 **Specification:** Arnold cast Alnico 5 (anisotropic, the most widely used Alnico grade), typical values per the Arnold Cast ALNICO brochure Rev. C
 
-**Category:** `magnet` &nbsp;·&nbsp; **Catalog version:** 1.8.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-17
+**Category:** `magnet` &nbsp;·&nbsp; **Catalog version:** 1.0.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-17
 
 #### Structural
 
@@ -272,6 +304,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 | Property | Value | Condition | Confidence | Source (head) |
 |---|---|---|---|---|
+| `max_operating_temp` | 525.0 C | MMPA class value for Alnico 5 | `standard` | Magnetic Materials Producers Association, 'MMPA Standard No. 0100-00: Standard Specifications for Permanent Magnet Materials' (2000 issue... |
 | `thermal_expansion` | 1.150e-05 1/K | room temperature; temperature range not stated in the brochure | `datasheet` | Arnold Magnetic Technologies, 'Cast ALNICO Permanent Magnets' brochure (February 2003, Rev. C), p.6.4 'Magnetic and Physical Properties (... |
 
 ### `ndfeb_n35`
@@ -280,7 +313,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 **Specification:** Sintered NdFeB N35 (Arnold catalog N35, equiv. Hitachi NEOMAX-35 etc.)
 
-**Category:** `magnet` &nbsp;·&nbsp; **Catalog version:** 1.8.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-17
+**Category:** `magnet` &nbsp;·&nbsp; **Catalog version:** 1.0.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-17
 
 #### Structural
 
@@ -288,6 +321,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 | Property | Value | Condition | Confidence | Source (head) |
 |---|---|---|---|---|
+| `youngs_modulus` | 1.520e+11 Pa | sintered Nd-Fe-B class value, direction not given | `standard` | Magnetic Materials Producers Association, 'MMPA Standard No. 0100-00: Standard Specifications for Permanent Magnet Materials' (2000 issue... |
 | `flexural_strength` | 2.850e+08 Pa | 20 C, sintered; 3-point bend test (ASTM C1161-class brittle-flexure method) | `datasheet` | Arnold Magnetic Technologies, 'Sintered Neodymium-Iron-Boron Magnets: N35', single-grade datasheet Rev. 210607, p.1 nominal/min/max table... |
 | `density` | 7600.0 kg/m^3 | 20 C, sintered | `datasheet` | Arnold Magnetic Technologies, 'Sintered Neodymium-Iron-Boron Magnets: N35', single-grade datasheet Rev. 210607, p.1 nominal/min/max table... |
 | `hardness_vickers` | 620.0 HV | 20 C, sintered | `datasheet` | Arnold Magnetic Technologies, 'Sintered Neodymium-Iron-Boron Magnets: N35', single-grade datasheet Rev. 210607, p.1 nominal/min/max table... |
@@ -321,7 +355,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 **Specification:** Sintered NdFeB N42 (Arnold catalog N42, equiv. Hitachi NEOMAX-42 etc.)
 
-**Category:** `magnet` &nbsp;·&nbsp; **Catalog version:** 1.8.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-17
+**Category:** `magnet` &nbsp;·&nbsp; **Catalog version:** 1.0.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-17
 
 #### Structural
 
@@ -329,6 +363,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 | Property | Value | Condition | Confidence | Source (head) |
 |---|---|---|---|---|
+| `youngs_modulus` | 1.520e+11 Pa | sintered Nd-Fe-B class value, direction not given | `standard` | Magnetic Materials Producers Association, 'MMPA Standard No. 0100-00: Standard Specifications for Permanent Magnet Materials' (2000 issue... |
 | `flexural_strength` | 2.850e+08 Pa | 20 C, sintered; 3-point bend test (ASTM C1161-class brittle-flexure method) | `datasheet` | Arnold Magnetic Technologies, 'Sintered Neodymium-Iron-Boron Magnets: N42', single-grade datasheet Rev. 210607, p.1 nominal/min/max table... |
 | `density` | 7600.0 kg/m^3 | 20 C, sintered | `datasheet` | Arnold Magnetic Technologies, 'Sintered Neodymium-Iron-Boron Magnets: N42', single-grade datasheet Rev. 210607, p.1 nominal/min/max table... |
 | `hardness_vickers` | 620.0 HV | 20 C, sintered | `datasheet` | Arnold Magnetic Technologies, 'Sintered Neodymium-Iron-Boron Magnets: N42', single-grade datasheet Rev. 210607, p.1 nominal/min/max table... |
@@ -362,7 +397,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 **Specification:** Sintered NdFeB N42EH (Arnold catalog N42EH)
 
-**Category:** `magnet` &nbsp;·&nbsp; **Catalog version:** 1.8.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-17
+**Category:** `magnet` &nbsp;·&nbsp; **Catalog version:** 1.0.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-17
 
 #### Structural
 
@@ -370,6 +405,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 | Property | Value | Condition | Confidence | Source (head) |
 |---|---|---|---|---|
+| `youngs_modulus` | 1.520e+11 Pa | sintered Nd-Fe-B class value, direction not given | `standard` | Magnetic Materials Producers Association, 'MMPA Standard No. 0100-00: Standard Specifications for Permanent Magnet Materials' (2000 issue... |
 | `flexural_strength` | 2.850e+08 Pa | 20 C, sintered; 3-point bend test (ASTM C1161-class brittle-flexure method) | `datasheet` | Arnold Magnetic Technologies, 'Sintered Neodymium-Iron-Boron Magnets: N42EH', single-grade datasheet Rev. 151021a, retrieved 2026-05-24 f... |
 | `density` | 7500.0 kg/m^3 | 20 C, sintered | `datasheet` | Arnold Magnetic Technologies, 'Sintered Neodymium-Iron-Boron Magnets: N42EH', single-grade datasheet Rev. 151021a, retrieved 2026-05-24 f... |
 | `hardness_vickers` | 620.0 HV | 20 C, sintered | `datasheet` | Arnold Magnetic Technologies, 'Sintered Neodymium-Iron-Boron Magnets: N42EH', single-grade datasheet Rev. 151021a, retrieved 2026-05-24 f... |
@@ -403,7 +439,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 **Specification:** Sintered NdFeB N42SH (dysprosium-doped variant for elevated-temperature continuous service, Arnold catalog N42SH)
 
-**Category:** `magnet` &nbsp;·&nbsp; **Catalog version:** 1.8.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-17
+**Category:** `magnet` &nbsp;·&nbsp; **Catalog version:** 1.0.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-17
 
 #### Structural
 
@@ -411,6 +447,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 | Property | Value | Condition | Confidence | Source (head) |
 |---|---|---|---|---|
+| `youngs_modulus` | 1.520e+11 Pa | sintered Nd-Fe-B class value, direction not given | `standard` | Magnetic Materials Producers Association, 'MMPA Standard No. 0100-00: Standard Specifications for Permanent Magnet Materials' (2000 issue... |
 | `flexural_strength` | 2.850e+08 Pa | 20 C, sintered; 3-point bend test (ASTM C1161-class brittle-flexure method) | `datasheet` | Arnold Magnetic Technologies, 'Sintered Neodymium-Iron-Boron Magnets: N42SH', single-grade datasheet Rev. 020821, retrieved 2026-05-24 fr... |
 | `density` | 7600.0 kg/m^3 | 20 C, sintered | `datasheet` | Arnold Magnetic Technologies, 'Sintered Neodymium-Iron-Boron Magnets: N42SH', single-grade datasheet Rev. 020821, retrieved 2026-05-24 fr... |
 | `hardness_vickers` | 620.0 HV | 20 C, sintered | `datasheet` | Arnold Magnetic Technologies, 'Sintered Neodymium-Iron-Boron Magnets: N42SH', single-grade datasheet Rev. 020821, retrieved 2026-05-24 fr... |
@@ -444,7 +481,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 **Specification:** Sintered NdFeB N42UH (Arnold catalog N42UH)
 
-**Category:** `magnet` &nbsp;·&nbsp; **Catalog version:** 1.8.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-17
+**Category:** `magnet` &nbsp;·&nbsp; **Catalog version:** 1.0.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-17
 
 #### Structural
 
@@ -452,6 +489,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 | Property | Value | Condition | Confidence | Source (head) |
 |---|---|---|---|---|
+| `youngs_modulus` | 1.520e+11 Pa | sintered Nd-Fe-B class value, direction not given | `standard` | Magnetic Materials Producers Association, 'MMPA Standard No. 0100-00: Standard Specifications for Permanent Magnet Materials' (2000 issue... |
 | `flexural_strength` | 2.850e+08 Pa | 20 C, sintered; 3-point bend test (ASTM C1161-class brittle-flexure method) | `datasheet` | Arnold Magnetic Technologies, 'Sintered Neodymium-Iron-Boron Magnets: N42UH', single-grade datasheet Rev. 210607, retrieved 2026-05-24 fr... |
 | `density` | 7600.0 kg/m^3 | 20 C, sintered | `datasheet` | Arnold Magnetic Technologies, 'Sintered Neodymium-Iron-Boron Magnets: N42UH', single-grade datasheet Rev. 210607, retrieved 2026-05-24 fr... |
 | `hardness_vickers` | 620.0 HV | 20 C, sintered | `datasheet` | Arnold Magnetic Technologies, 'Sintered Neodymium-Iron-Boron Magnets: N42UH', single-grade datasheet Rev. 210607, retrieved 2026-05-24 fr... |
@@ -485,7 +523,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 **Specification:** Sintered NdFeB N50 (Arnold catalog N50, equiv. Hitachi NEOMAX-50 etc.)
 
-**Category:** `magnet` &nbsp;·&nbsp; **Catalog version:** 1.8.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-17
+**Category:** `magnet` &nbsp;·&nbsp; **Catalog version:** 1.0.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-17
 
 #### Structural
 
@@ -493,6 +531,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 | Property | Value | Condition | Confidence | Source (head) |
 |---|---|---|---|---|
+| `youngs_modulus` | 1.520e+11 Pa | sintered Nd-Fe-B class value, direction not given | `standard` | Magnetic Materials Producers Association, 'MMPA Standard No. 0100-00: Standard Specifications for Permanent Magnet Materials' (2000 issue... |
 | `flexural_strength` | 2.850e+08 Pa | 20 C, sintered; 3-point bend test (ASTM C1161-class brittle-flexure method) | `datasheet` | Arnold Magnetic Technologies, 'Sintered Neodymium-Iron-Boron Magnets: N50', single-grade datasheet Rev. 210802, p.1 nominal/min/max table... |
 | `density` | 7600.0 kg/m^3 | 20 C, sintered | `datasheet` | Arnold Magnetic Technologies, 'Sintered Neodymium-Iron-Boron Magnets: N50', single-grade datasheet Rev. 210802, p.1 nominal/min/max table... |
 | `hardness_vickers` | 620.0 HV | 20 C, sintered | `datasheet` | Arnold Magnetic Technologies, 'Sintered Neodymium-Iron-Boron Magnets: N50', single-grade datasheet Rev. 210802, p.1 nominal/min/max table... |
@@ -526,7 +565,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 **Specification:** Arnold Recoma 28 / Sm2Co17 sintered SmCo, transverse-pressed (BHmax nominal 28 MGOe = 225 kJ/m^3, range 25-28 MGOe / 195-225 kJ/m^3)
 
-**Category:** `magnet` &nbsp;·&nbsp; **Catalog version:** 1.8.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-17
+**Category:** `magnet` &nbsp;·&nbsp; **Catalog version:** 1.0.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-17
 
 #### Structural
 
@@ -572,7 +611,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 **Specification:** Aluminium 1350 (EC grade), 61.0% IACS per IEC 60889 (equiv. ASTM B230 wire / B233 redraw rod / B231 AAC)
 
-**Category:** `metal` &nbsp;·&nbsp; **Catalog version:** 1.7.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-17
+**Category:** `metal` &nbsp;·&nbsp; **Catalog version:** 1.0.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-17
 
 #### Structural
 
@@ -580,6 +619,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 | Property | Value | Condition | Confidence | Source (head) |
 |---|---|---|---|---|
+| `youngs_modulus` | 6.890e+10 Pa | room temperature, temper not stated | `datasheet` | California Fine Wire Co., Item #100028 'Aluminum EC 1350 Wire' product specification page (cites ASTM B230 / B231 / B233), no revision da... |
 | `density` | 2700.0 kg/m^3 | 20 C | `standard` | CRC Handbook of Chemistry and Physics |
 
 #### Electromagnetic
@@ -589,6 +629,14 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 | `resistivity_at_20C` | 2.826e-08 Ohm*m | 20 C, EC/1350 grade, 61.0% IACS | `standard` | IEC 60889:1987, 'Hard-drawn aluminium wire for overhead line conductors': the international standard defining the reference electrical pr... |
 | `temp_coeff_resistivity` | 0.00403 1/K | linear model at 20 C reference (IEC 60889) | `standard` | IEC 60889:1987, 'Hard-drawn aluminium wire for overhead line conductors': the international standard defining the reference electrical pr... |
 | `relative_permeability` | 1.00002 | 20 C, bulk paramagnetic value | `standard` | CRC Handbook of Chemistry and Physics, 95th ed. (2014), Section 12, Magnetic Susceptibility of the Elements. The canonical Tier-1 compila... |
+
+#### Thermal
+
+| Property | Value | Condition | Confidence | Source (head) |
+|---|---|---|---|---|
+| `thermal_conductivity` | 229.0 W/(m*K) | temperature not stated | `datasheet` | California Fine Wire Co., Item #100028 'Aluminum EC 1350 Wire' product specification page (cites ASTM B230 / B231 / B233), no revision da... |
+| `thermal_expansion` | 2.360e-05 1/K | temperature range not stated | `datasheet` | California Fine Wire Co., Item #100028 'Aluminum EC 1350 Wire' product specification page (cites ASTM B230 / B231 / B233), no revision da... |
+| `melting_temp` | 657.0 C | single value as published (no solidus/liquidus pair) | `datasheet` | California Fine Wire Co., Item #100028 'Aluminum EC 1350 Wire' product specification page (cites ASTM B230 / B231 / B233), no revision da... |
 
 ### `aluminum_6061_t6`
 
@@ -991,6 +1039,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 |---|---|---|---|---|
 | `thermal_conductivity` | 0.2 W/(m*K) | 23 C (296 K), ASTM D5470 | `datasheet` | DuPont 'Kapton HN Polyimide Film' technical data sheet, document QE-10206 (03/26), published by Qnity Electronics (the DuPont electronics... |
 | `specific_heat` | 1090.0 J/(kg*K) | differential calorimetry; temperature not stated on the sheet | `datasheet` | DuPont 'Kapton HN Polyimide Film' technical data sheet, document QE-10206 (03/26), published by Qnity Electronics (the DuPont electronics... |
+| `max_operating_temp` | 400.0 C | service statement | `datasheet` | DuPont 'Kapton HN Polyimide Film' technical data sheet, document QE-10206 (03/26), published by Qnity Electronics (the DuPont electronics... |
 | `thermal_expansion` | 2.000e-05 1/K | -14 to 38 C, ASTM D-696, as-received film | `datasheet` | DuPont 'Kapton HN Polyimide Film' technical data sheet, document QE-10206 (03/26), published by Qnity Electronics (the DuPont electronics... |
 
 ### `mw_pai_class_200`
@@ -1026,6 +1075,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 | Property | Value | Condition | Confidence | Source (head) |
 |---|---|---|---|---|
 | `thermal_conductivity` | 0.26 W/(m*K) | 20 C, unfilled PAI resin | `datasheet` | Solvay Specialty Polymers, 'Torlon 4203L Polyamide-imide (PAI)' technical data sheet, Revision 2014-10-22. PAI resin underlying NEMA Clas... |
+| `specific_heat` | 1012.0 J/(kg*K) | 25 C, DSC | `datasheet` | Solvay Specialty Polymers 'Torlon PAI Design Guide', D 03/2007, R 07/2015, Version 5.0, p.15 Table 12 'Specific heat of Torlon PAI resins... |
 | `max_operating_temp` | 200.0 C | continuous service, NEMA MW 35-C grade | `standard` | NEMA MW 35-C 'Magnet Wire, Insulated, Polyamide-Imide Film, 200 degC' wire grade standard (defines minimum dielectric breakdown + insulat... |
 | `thermal_expansion` | 3.100e-05 1/K | flow direction, ASTM E831, bulk PAI resin | `datasheet` | Solvay Specialty Polymers, 'Torlon 4203L Polyamide-imide (PAI)' technical data sheet, Revision 2014-10-22. PAI resin underlying NEMA Clas... |
 | `glass_transition` | 277.0 C | DSC onset, Solvay method 2nd heat (ISO 11357-2 equivalent) | `datasheet` | Solvay Specialty Polymers, 'Torlon 4203L Polyamide-imide (PAI)' technical data sheet, Revision 2014-10-22. PAI resin underlying NEMA Clas... |
@@ -1082,7 +1132,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 **Specification:** EOS PA 2200 (also Formlabs Nylon 12, HP MJF PA12)
 
-**Category:** `polymer` &nbsp;·&nbsp; **Catalog version:** 1.9.1 &nbsp;·&nbsp; **Last reviewed:** 2026-06-22
+**Category:** `polymer` &nbsp;·&nbsp; **Catalog version:** 1.0.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-22
 
 #### Structural
 
@@ -1098,6 +1148,10 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 | Property | Value | Condition | Confidence | Source (head) |
 |---|---|---|---|---|
+| `thermal_conductivity` | 0.144 W/(m*K) | perpendicular to the sintered layers | `datasheet` | EOS GmbH, 'Product Information PA 2200', AHO / 03.10 (March 2010), EOS's own document, copy retrieved 2026-10-16 from https://www.sculpte... |
+| `specific_heat` | 2350.0 J/(kg*K) | DIN 51005 | `datasheet` | EOS GmbH, 'Product Information PA 2200', AHO / 03.10 (March 2010), EOS's own document, copy retrieved 2026-10-16 from https://www.sculpte... |
+| `max_operating_temp` | 80 C | under steady stress | `datasheet` | EOS GmbH, 'Product Information PA 2200', AHO / 03.10 (March 2010), EOS's own document, copy retrieved 2026-10-16 from https://www.sculpte... |
+| `thermal_expansion` | 1.090e-04 1/K | ISO 11359 / DIN 53752-A | `datasheet` | EOS GmbH, 'Product Information PA 2200', AHO / 03.10 (March 2010), EOS's own document, copy retrieved 2026-10-16 from https://www.sculpte... |
 | `melting_temp` | 176.0 C | EN ISO 11357-1 DSC | `datasheet` | EOS GmbH, 'PA 2200 Material Data Sheet' (current MDS page), specifically grade 'PA 2200 Balance' (the standard 120 µm layer thickness var... |
 
 ### `peek_unfilled`
@@ -1153,6 +1207,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 | Property | Value | Condition | Confidence | Source (head) |
 |---|---|---|---|---|
 | `youngs_modulus` | 3.580e+09 Pa | 5 mm/min, ASTM D 638 | `datasheet` | SABIC, 'ULTEM Resin 1010: Region Americas Technical Data Sheet', Revision 20170706, retrieved 2026-05-24 from https://pc-api-public.sabic... |
+| `poisson_ratio` | 0.36 | ASTM E132 | `datasheet` | SABIC 'ULTEM Resin 1010' technical data sheet, Revision 20260505, retrieved 2026-10-16 from https://materialfinder.sabic-specialties.com/... |
 | `yield_stress` | 1.100e+08 Pa | Type I tensile, 5 mm/min yield, ASTM D 638 | `datasheet` | SABIC, 'ULTEM Resin 1010: Region Americas Technical Data Sheet', Revision 20170706, retrieved 2026-05-24 from https://pc-api-public.sabic... |
 | `flexural_strength` | 1.650e+08 Pa | 23 C yield, 2.6 mm/min, 100 mm span, ASTM D 790 | `datasheet` | SABIC, 'ULTEM Resin 1010: Region Americas Technical Data Sheet', Revision 20170706, retrieved 2026-05-24 from https://pc-api-public.sabic... |
 | `density` | 1270.0 kg/m^3 | 23 C, ASTM D 792 | `datasheet` | SABIC, 'ULTEM Resin 1010: Region Americas Technical Data Sheet', Revision 20170706, retrieved 2026-05-24 from https://pc-api-public.sabic... |
@@ -1269,7 +1324,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 **Specification:** Carpenter Hiperco 50 / ASTM A801 Alloy Type 1 / MIL A 47182, 0.014 in (0.355 mm) strip, typical magnetic anneal
 
-**Category:** `soft_magnetic` &nbsp;·&nbsp; **Catalog version:** 1.4.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-10
+**Category:** `soft_magnetic` &nbsp;·&nbsp; **Catalog version:** 1.0.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-10
 
 #### Structural
 
@@ -1318,7 +1373,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 **Specification:** Cleveland-Cliffs (formerly AK Steel) DI-MAX M-19, ASTM A677 grade 36F155, 29 gauge (0.014 in / 0.36 mm), C-5 surface insulation, fully-processed
 
-**Category:** `soft_magnetic` &nbsp;·&nbsp; **Catalog version:** 1.4.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-10
+**Category:** `soft_magnetic` &nbsp;·&nbsp; **Catalog version:** 1.0.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-10
 
 #### Structural
 
@@ -1367,7 +1422,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 **Specification:** EN 10106 M270-35A (specific core loss 2.70 W/kg at 1.5T/50Hz, 0.35 mm thickness)
 
-**Category:** `soft_magnetic` &nbsp;·&nbsp; **Catalog version:** 1.4.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-10
+**Category:** `soft_magnetic` &nbsp;·&nbsp; **Catalog version:** 1.0.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-10
 
 #### Structural
 
@@ -1414,7 +1469,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 **Specification:** Hitachi Metals / Proterial / Metglas Inc. 2605SA1 amorphous alloy ribbon (Fe78B13Si9, 25 +/- 4 micrometer thickness, standard widths 142.2 / 170.2 / 213.4 mm, longitudinal-field-annealed per manufacturer recommendation 370 deg C / 2 h / 2400 A/m); per ASTM A932/A932M-01 magnetic measurement conditions
 
-**Category:** `soft_magnetic` &nbsp;·&nbsp; **Catalog version:** 1.4.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-10
+**Category:** `soft_magnetic` &nbsp;·&nbsp; **Catalog version:** 1.0.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-10
 
 #### Structural
 
@@ -1441,6 +1496,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 | `max_operating_temp` | 150.0 C | continuous service / max operating temperature for amorphous 2605SA1 ribbon (set well below the 508 deg C crystallization temperature so long-term amorphous-structure stability is guaranteed) | `datasheet` | Metglas, Inc. (Hitachi Metals subsidiary), 'POWERLITE Inductor Cores' technical bulletin, document reference ref:PLC05092011 (May 9, 2011... |
 | `thermal_expansion` | 7.600e-06 1/K | linear CTE 30-300 deg C | `datasheet` | Hitachi Metals (now Proterial) / Metglas, Inc., 'Amorphous Alloys for Transformer Cores,' technical bulletin dated 29 April 2011, coverin... |
 | `curie_temp` | 399.0 C | alloy Curie point (intrinsic Fe78B13Si9 property) | `datasheet` | Metglas, Inc. (Hitachi Metals subsidiary), 'POWERLITE Inductor Cores' technical bulletin, document reference ref:PLC05092011 (May 9, 2011... |
+| `melting_temp` | 1180.0 C | SDS Section 9 | `datasheet` | Metglas Inc. Safety Data Sheet '2605 SA1, 2605 HB1M, 2605 SC and HB1M-LL', Version 1.01, revised 03/12/2021, Section 9, retrieved 2026-10... |
 
 ### `mnzn_ferrite_3c95`
 
@@ -1448,7 +1504,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 **Specification:** Ferroxcube 3C95 manganese-zinc ferrite, per the Ferroxcube material specification of 2015-10-02 ('a low to medium frequency power material with low power losses from 25 to 100 C for use in power transformers at frequencies up to 0.5 MHz')
 
-**Category:** `soft_magnetic` &nbsp;·&nbsp; **Catalog version:** 1.4.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-10
+**Category:** `soft_magnetic` &nbsp;·&nbsp; **Catalog version:** 1.0.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-10
 
 #### Structural
 
@@ -1478,7 +1534,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 **Specification:** MuMETAL (Ni 80 / Mo 5 / Fe balance / Mn 0.3-0.5 / Si 0.1-0.4 wt%), meets ASTM A753 Alloy 4, UNS N14080, DIN 17745, MIL-N-14411 Composition 1; magnetic properties after final hydrogen (perfection) anneal
 
-**Category:** `soft_magnetic` &nbsp;·&nbsp; **Catalog version:** 1.4.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-10
+**Category:** `soft_magnetic` &nbsp;·&nbsp; **Catalog version:** 1.0.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-10
 
 #### Structural
 
@@ -1515,7 +1571,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 **Specification:** Vacuumschmelze VITROPERM 500 F nanocrystalline ribbon (Fe73.5Cu1Nb3Si13.5B9 / FINEMET-class atomic composition, balance Fe + 1.0 Cu + 3.0 Nb + 15.5 Si + 6.9 B in atomic-%; balance Fe + 1.3 Cu + 5.6 Nb + 8.8 Si + 1.5 B in weight-%), ribbon thickness 16 +/- 2 / 18 +/- 3 micrometers, transverse-field F-annealing route)
 
-**Category:** `soft_magnetic` &nbsp;·&nbsp; **Catalog version:** 1.4.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-10
+**Category:** `soft_magnetic` &nbsp;·&nbsp; **Catalog version:** 1.0.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-10
 
 #### Structural
 
@@ -1523,6 +1579,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 | Property | Value | Condition | Confidence | Source (head) |
 |---|---|---|---|---|
+| `youngs_modulus` | 1.500e+11 Pa | VITROPERM 500/800 family row | `datasheet` | VACUUMSCHMELZE web page 'Nanocrystalline Material - VITROPERM', Physical Properties table, retrieved 2026-10-16 from https://vacuumschmel... |
 | `density` | 7350.0 kg/m^3 | post-anneal nanocrystalline state, 20 deg C; this is the intrinsic alloy density, NOT a tape-wound-core bulk density (which would be lower due to inter-layer voids + insulation; depends on winding tension and core geometry) | `datasheet` | VACUUMSCHMELZE GmbH & Co. KG (Hanau, Germany), 'VITROPERM(R) 800 / 500' datasheet (published October 2021, © VACUUMSCHMELZE GmbH & Co. KG... |
 
 #### Electromagnetic
