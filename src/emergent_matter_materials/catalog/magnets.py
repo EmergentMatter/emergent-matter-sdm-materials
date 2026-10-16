@@ -483,6 +483,8 @@ _MMPA_0100_00 = (
     "Magnetics). Tables marked 'composite of information available from industry "
     "and research sources'"
 )
+
+
 def _ndfeb_recoil_permeability(
     d_value: float,
     s_primary_source: str,
@@ -652,11 +654,17 @@ def _ndfeb_structural(s_source_sheet: str) -> Structural:
     return Structural(
         youngs_modulus=_PV(
             d_value=152000000000.0,
-            s_units='Pa',
-            s_source=_MMPA_0100_00 + " -- Table IV-3 Typical Physical Properties, Sintered Rare Earth Magnets: Nd-Fe-B modulus of elasticity 22 x 10^6 psi, 152 x 10^9 Pa",
-            s_condition='sintered Nd-Fe-B class value, direction not given',
-            s_confidence='standard',
-            s_notes="One value for all sintered Nd-Fe-B in the MMPA table, not per grade; Arnold's per-grade sheets publish no modulus. The same row's CTE disagrees with Arnold's own sheets, so CTE is not taken from it.",
+            s_units="Pa",
+            s_source=_MMPA_0100_00
+            + " -- Table IV-3 Typical Physical Properties, Sintered Rare Earth Magnets: Nd-Fe-B "
+            "modulus of elasticity 22 x 10^6 psi, 152 x 10^9 Pa",
+            s_condition="sintered Nd-Fe-B class value, direction not given",
+            s_confidence="standard",
+            s_notes=(
+                "One value for all sintered Nd-Fe-B in the MMPA table, not per grade; Arnold's "
+                "per-grade sheets publish no modulus. The same row's CTE disagrees with Arnold's "
+                "own sheets, so CTE is not taken from it."
+            ),
         ),
         flexural_strength=_PV(
             d_value=285e6,
@@ -993,11 +1001,17 @@ def _ndfeb_high_temp_structural(
     return Structural(
         youngs_modulus=_PV(
             d_value=152000000000.0,
-            s_units='Pa',
-            s_source=_MMPA_0100_00 + " -- Table IV-3 Typical Physical Properties, Sintered Rare Earth Magnets: Nd-Fe-B modulus of elasticity 22 x 10^6 psi, 152 x 10^9 Pa",
-            s_condition='sintered Nd-Fe-B class value, direction not given',
-            s_confidence='standard',
-            s_notes="One value for all sintered Nd-Fe-B in the MMPA table, not per grade; Arnold's per-grade sheets publish no modulus. The same row's CTE disagrees with Arnold's own sheets, so CTE is not taken from it.",
+            s_units="Pa",
+            s_source=_MMPA_0100_00
+            + " -- Table IV-3 Typical Physical Properties, Sintered Rare Earth Magnets: Nd-Fe-B "
+            "modulus of elasticity 22 x 10^6 psi, 152 x 10^9 Pa",
+            s_condition="sintered Nd-Fe-B class value, direction not given",
+            s_confidence="standard",
+            s_notes=(
+                "One value for all sintered Nd-Fe-B in the MMPA table, not per grade; Arnold's "
+                "per-grade sheets publish no modulus. The same row's CTE disagrees with Arnold's "
+                "own sheets, so CTE is not taken from it."
+            ),
         ),
         flexural_strength=_PV(
             d_value=285e6,
@@ -2132,11 +2146,16 @@ alnico_5_cast = Material(
     thermal=Thermal(
         max_operating_temp=_PV(
             d_value=525.0,
-            s_units='C',
-            s_source=_MMPA_0100_00 + " -- Table II-5 Thermal Properties of Alnico Materials, Alnico 5 (R1-1-1): Max. Service Temperature 525 C (975 F)",
-            s_condition='MMPA class value for Alnico 5',
-            s_confidence='standard',
-            s_notes='Arnold Cast ALNICO brochure Rev. C (p. 6.14): above 538 C (1000 F) a metallurgical change makes magnetic strength fall rapidly.',
+            s_units="C",
+            s_source=_MMPA_0100_00
+            + " -- Table II-5 Thermal Properties of Alnico Materials, Alnico 5 (R1-1-1): Max. "
+            "Service Temperature 525 C (975 F)",
+            s_condition="MMPA class value for Alnico 5",
+            s_confidence="standard",
+            s_notes=(
+                "Arnold Cast ALNICO brochure Rev. C (p. 6.14): above 538 C (1000 F) a "
+                "metallurgical change makes magnetic strength fall rapidly."
+            ),
         ),
         thermal_expansion=_PV(
             d_value=11.5e-6,

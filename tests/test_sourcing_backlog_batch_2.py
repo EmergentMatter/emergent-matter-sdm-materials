@@ -91,7 +91,7 @@ def test_tpu_values_and_gaps():
     assert m.structural.d_density_kg_m3 == pytest.approx(1150.0)
     assert m.structural.yield_stress is None  # TPU has no yield point
     assert m.structural.youngs_modulus is None  # not published for A-hardness grades
-    # 2026-10-16: thermal conductivity found in BASF's Physical Properties extract; the rest still unpublished
+    # 2026-10-16: conductivity found in BASF's Physical Properties extract
     assert m.thermal.d_thermal_conductivity_W_mK == pytest.approx(0.30)
     assert m.thermal.specific_heat is None and m.thermal.thermal_expansion is None
 

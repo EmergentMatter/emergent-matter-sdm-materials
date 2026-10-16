@@ -115,6 +115,7 @@ from emergent_matter_materials.material import Material
 from emergent_matter_materials.property_value import PropertyValue as _PV
 from emergent_matter_materials.structural import Structural
 from emergent_matter_materials.thermal import Thermal
+
 _CFW_AL_1350 = (
     "California Fine Wire Co., Item #100028 'Aluminum EC 1350 Wire' product specification page "
     "(cites ASTM B230 / B231 / B233), no revision date, retrieved 2026-10-16 from "
@@ -1862,35 +1863,38 @@ aluminum_1350_ec = Material(
     thermal=Thermal(
         thermal_conductivity=_PV(
             d_value=229.0,
-            s_units='W/(m*K)',
+            s_units="W/(m*K)",
             s_source=_CFW_AL_1350 + " -- Thermal Conductivity 2.290000 W/cm/C",
-            s_condition='temperature not stated',
-            s_confidence='datasheet',
+            s_condition="temperature not stated",
+            s_confidence="datasheet",
         ),
         thermal_expansion=_PV(
             d_value=2.36e-05,
-            s_units='1/K',
+            s_units="1/K",
             s_source=_CFW_AL_1350 + " -- Coefficient of Linear Expansion 23.6 x 10-6 in/in C",
-            s_condition='temperature range not stated',
-            s_confidence='datasheet',
+            s_condition="temperature range not stated",
+            s_confidence="datasheet",
         ),
         melting_temp=_PV(
             d_value=657.0,
-            s_units='C',
+            s_units="C",
             s_source=_CFW_AL_1350 + " -- Melting Point 657.00 C",
-            s_condition='single value as published (no solidus/liquidus pair)',
-            s_confidence='datasheet',
-            s_notes='Specific heat on the same page (0.241 cal/g, unit printed without /C) is not stored: the unit is garbled.',
+            s_condition="single value as published (no solidus/liquidus pair)",
+            s_confidence="datasheet",
+            s_notes=(
+                "Specific heat on the same page (0.241 cal/g, unit printed without /C) is not "
+                "stored: the unit is garbled."
+            ),
         ),
     ),
     structural=Structural(
         youngs_modulus=_PV(
             d_value=68900000000.0,
-            s_units='Pa',
+            s_units="Pa",
             s_source=_CFW_AL_1350 + " -- Youngs Modulus 10 x 10^6 psi",
-            s_condition='room temperature, temper not stated',
-            s_confidence='datasheet',
-            s_notes='10 x 10^6 psi = 68.9 GPa. The producer page gives no Poisson ratio.',
+            s_condition="room temperature, temper not stated",
+            s_confidence="datasheet",
+            s_notes="10 x 10^6 psi = 68.9 GPa. The producer page gives no Poisson ratio.",
         ),
         density=_PV(
             d_value=2700.0,
