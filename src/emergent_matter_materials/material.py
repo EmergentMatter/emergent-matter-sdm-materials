@@ -48,6 +48,7 @@ from dataclasses import dataclass
 from typing import Literal, get_args
 
 from emergent_matter_materials.crystal_anisotropy import CrystalAnisotropy
+from emergent_matter_materials.derivation import Derivation
 from emergent_matter_materials.electromagnetic import Electromagnetic
 from emergent_matter_materials.manufacturing import Manufacturing
 from emergent_matter_materials.structural import Structural
@@ -91,10 +92,25 @@ class Material:
     manufacturing: Manufacturing | None = None
     crystal_anisotropy: CrystalAnisotropy | None = None
 
+    # ── Lineage: set only on a material built by derive_material(), recording
+    # its base and every override. None for an entry authored directly.
+    derivation: Derivation | None = None
+
     def __post_init__(self) -> None:
         # s_id sanity
         if not self.s_id:
             raise ValueError("Material.s_id cannot be empty")
+        if self.derivation is not None:
+            if not isinstance(self.derivation, Derivation):
+                raise TypeError(
+                    f"Material.derivation must be a Derivation, "
+                    f"got {type(self.derivation).__name__} (s_id={self.s_id!r})"
+                )
+            if self.derivation.s_base_id == self.s_id:
+                raise ValueError(
+                    f"Material {self.s_id!r} cannot be derived from itself; a derived "
+                    f"material always gets a new id"
+                )
         if self.s_id != self.s_id.lower():
             raise ValueError(f"Material.s_id should be snake_case lowercase, got {self.s_id!r}")
         if " " in self.s_id:

@@ -13,6 +13,8 @@ catalog import time during test collection.
 
 from __future__ import annotations
 
+from collections.abc import Mapping
+from collections.abc import Set as AbstractSet
 from dataclasses import fields
 from typing import TYPE_CHECKING, Any
 
@@ -24,7 +26,7 @@ if TYPE_CHECKING:
 
 def _validate_group_units(
     instance: Any,
-    group_fields: set[str],
+    group_fields: AbstractSet[str],
     *,
     b_optional: bool = False,
 ) -> None:
@@ -73,6 +75,98 @@ def _validate_group_units(
             )
 
 
+#: Properties whose tables may be secant (mean-from-reference) tables: mean
+#: CTE, and the mean specific heat some steel datasheets publish. Allowing a
+#: reference temperature anywhere else would hide a data-entry mistake.
+_SECANT_TABLE_KEYS: frozenset[str] = frozenset(
+    {"thermal_expansion", "thermal_expansion_perpendicular", "specific_heat"}
+)
+
+
+def _normalize_temperature_tables(
+    instance: Any,
+    table_slots: Mapping[str, str],
+) -> None:
+    """Validate ``instance.temperature_tables`` and freeze it into a ``PropertyTableMap``.
+
+    Runs inside a frozen group's ``__post_init__``, so it rebinds the field
+    with ``object.__setattr__``.
+
+    Args:
+        instance: The group being constructed.
+        table_slots: The group's tabulable properties: table key to the
+            scalar slot whose units and range checks the table borrows.
+            Usually identical names; a key differs from its slot only
+            when the slot name is condition-specific (``"resistivity"``
+            borrows ``resistivity_at_20C``).
+
+    Checks, per table:
+      - the key is one of the group's tabulable properties (temperatures
+        themselves, like ``melting_temp``, can't be tabulated against
+        temperature);
+      - the value is a ``PropertyTable`` in the slot's canonical units;
+      - a reference temperature appears only on a secant-capable property;
+      - every point passes the slot's own single-field range checks
+        (positive conductivity, emissivity in [0, 1], ...). These are
+        reused by building a throwaway group with the point as the scalar.
+        Cross-field invariants (yield <= UTS) need two tables at once, so
+        the owning group checks those itself.
+
+    Raises:
+        TypeError: the field is not a mapping, or a value is not a
+            ``PropertyTable``.
+        ValueError: any check above fails. The message names the group,
+            the key, and the offending temperature.
+    """
+    # Imported here: property_table is a leaf module, but keeping this
+    # import local means validation.py never forms a cycle with it.
+    from emergent_matter_materials.property_table import PropertyTable, PropertyTableMap
+
+    s_group = type(instance).__name__
+    tables = instance.temperature_tables
+    if not isinstance(tables, Mapping):
+        raise TypeError(
+            f"{s_group}.temperature_tables must be a mapping of slot name to "
+            f"PropertyTable, got {type(tables).__name__}"
+        )
+
+    for s_key, table in tables.items():
+        if s_key not in table_slots:
+            raise ValueError(
+                f"{s_group}.temperature_tables key {s_key!r} is not a tabulable property of "
+                f"{s_group}. Valid keys: {sorted(table_slots)}"
+            )
+        s_slot = table_slots[s_key]
+        if not isinstance(table, PropertyTable):
+            raise TypeError(
+                f"{s_group}.temperature_tables[{s_key!r}] must be a PropertyTable, "
+                f"got {type(table).__name__}"
+            )
+        s_expected = _PROPERTY_EXPECTED_UNITS[s_slot]
+        if table.s_units != s_expected:
+            raise ValueError(
+                f"{s_group}.temperature_tables[{s_key!r}]: wrong units. "
+                f"Expected {s_expected!r}, got {table.s_units!r}"
+            )
+        if table.b_is_secant and s_key not in _SECANT_TABLE_KEYS:
+            raise ValueError(
+                f"{s_group}.temperature_tables[{s_key!r}] sets "
+                f"d_reference_temperature_C, but only {sorted(_SECANT_TABLE_KEYS)} "
+                f"tables can be secant"
+            )
+        for point in table.points:
+            try:
+                type(instance)(**{s_slot: point.value})
+            except ValueError as err:
+                raise ValueError(
+                    f"{s_group}.temperature_tables[{s_key!r}] point at "
+                    f"{point.d_temperature_C} C: {err}"
+                ) from err
+
+    if not isinstance(tables, PropertyTableMap):
+        object.__setattr__(instance, "temperature_tables", PropertyTableMap(tables))
+
+
 def _require_positive(name: str, pv: PropertyValue | None) -> None:
     """Validate that a PropertyValue's numeric value is strictly positive.
 
@@ -85,6 +179,7 @@ def _require_positive(name: str, pv: PropertyValue | None) -> None:
 
 
 __all__ = [
+    "_normalize_temperature_tables",
     "_require_positive",
     "_validate_group_units",
 ]

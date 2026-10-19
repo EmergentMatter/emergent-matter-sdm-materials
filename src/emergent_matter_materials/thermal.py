@@ -10,14 +10,62 @@ material, plus five optional fields populated where the data exists:
 The three required fields are what a winding thermal model needs at
 minimum: conduction to dissipate winding I²R, heat capacity for
 transient temp rise, and a temperature ceiling.
+
+Temperature dependence of any slot lives in ``temperature_tables`` (see
+``property_table``); the scalar slot stays the headline value.
 """
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from collections.abc import Mapping
+from dataclasses import dataclass, field
+from types import MappingProxyType
 
+from emergent_matter_materials.property_table import (
+    PropertyTable,
+    PropertyTableMap,
+    _require_table,
+)
 from emergent_matter_materials.property_value import PropertyValue
-from emergent_matter_materials.validation import _validate_group_units
+from emergent_matter_materials.validation import (
+    _normalize_temperature_tables,
+    _validate_group_units,
+)
+
+#: The PropertyValue slots of ``Thermal``, unit-checked on construction.
+_THERMAL_SCALAR_FIELDS: frozenset[str] = frozenset(
+    {
+        "thermal_conductivity",
+        "specific_heat",
+        "max_operating_temp",
+        "thermal_expansion",
+        "thermal_expansion_perpendicular",
+        "glass_transition",
+        "curie_temp",
+        "melting_temp",
+        "solidus_temp",
+        "liquidus_temp",
+        "latent_heat_fusion",
+        "emissivity",
+    }
+)
+
+#: Valid ``temperature_tables`` keys, each mapped to the slot it borrows units
+#: and range checks from. Temperature-valued slots (melting, solidus, Curie,
+#: ...) and the latent heat of a phase change don't vary along a temperature
+#: axis, so they can't be tabulated.
+_THERMAL_TABLE_SLOTS: Mapping[str, str] = MappingProxyType(
+    {
+        s: s
+        for s in (
+            "thermal_conductivity",
+            "specific_heat",
+            "thermal_expansion",
+            "thermal_expansion_perpendicular",
+            "emissivity",
+        )
+    }
+)
 
 
 @dataclass(frozen=True)
@@ -45,23 +93,45 @@ class Thermal:
     curie_temp: PropertyValue | None = None  # °C (ferromagnetics)
     melting_temp: PropertyValue | None = None  # °C
     emissivity: PropertyValue | None = None  # dimensionless
+    # °C. Solidus / liquidus bound the melting range of an alloy; melting_temp
+    # stays the single headline melting point a source quotes. Declared after
+    # emissivity so existing positional construction keeps its meaning.
+    solidus_temp: PropertyValue | None = None
+    liquidus_temp: PropertyValue | None = None
+    latent_heat_fusion: PropertyValue | None = None  # J/kg
+    # Temperature dependence of the scalar slots above, keyed by slot name
+    # (e.g. "thermal_conductivity"). See property_table.py.
+    temperature_tables: Mapping[str, PropertyTable] = field(default_factory=PropertyTableMap)
 
     def __post_init__(self) -> None:
         _validate_group_units(
             self,
-            group_fields={
-                "thermal_conductivity",
-                "specific_heat",
-                "max_operating_temp",
-                "thermal_expansion",
-                "thermal_expansion_perpendicular",
-                "glass_transition",
-                "curie_temp",
-                "melting_temp",
-                "emissivity",
-            },
+            group_fields=_THERMAL_SCALAR_FIELDS,
             b_optional=True,
         )
+        _normalize_temperature_tables(self, _THERMAL_TABLE_SLOTS)
+
+        for s_name in ("solidus_temp", "liquidus_temp"):
+            pv = getattr(self, s_name)
+            if pv is not None and pv.d_value < -273.15:
+                raise ValueError(
+                    f"Thermal.{s_name} = {pv.d_value} C is below absolute zero; "
+                    f"check the source citation."
+                )
+        if (
+            self.solidus_temp is not None
+            and self.liquidus_temp is not None
+            and self.solidus_temp.d_value > self.liquidus_temp.d_value
+        ):
+            raise ValueError(
+                f"Thermal: solidus_temp ({self.solidus_temp.d_value} C) > liquidus_temp "
+                f"({self.liquidus_temp.d_value} C). The solidus can't exceed the liquidus; "
+                f"check the source citations."
+            )
+        if self.latent_heat_fusion is not None and self.latent_heat_fusion.d_value <= 0.0:
+            raise ValueError(
+                f"latent_heat_fusion must be positive, got {self.latent_heat_fusion.d_value}"
+            )
 
         # Positivity / range invariants, only on present fields
         if self.thermal_conductivity is not None and self.thermal_conductivity.d_value <= 0.0:
@@ -122,8 +192,24 @@ class Thermal:
         return self._req("melting_temp").d_value
 
     @property
+    def d_solidus_temp_C(self) -> float:
+        return self._req("solidus_temp").d_value
+
+    @property
+    def d_liquidus_temp_C(self) -> float:
+        return self._req("liquidus_temp").d_value
+
+    @property
+    def d_latent_heat_fusion_J_kg(self) -> float:
+        return self._req("latent_heat_fusion").d_value
+
+    @property
     def d_emissivity(self) -> float:
         return self._req("emissivity").d_value
+
+    def table(self, s_field_name: str) -> PropertyTable:
+        """The temperature table for a scalar slot; raises if none is attached."""
+        return _require_table(self, s_field_name)
 
 
 __all__ = ["Thermal"]

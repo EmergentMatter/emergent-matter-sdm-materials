@@ -2,7 +2,7 @@
 
 **This document is auto-generated. Edit the Python catalog files, then regenerate with `uv run python scripts/generate_catalog_doc.py`. Do not hand-edit this file.**
 
-_Last generated: 2026-10-16 19:44 UTC_
+_Last generated: 2026-10-19 15:58 UTC_
 
 ---
 

@@ -30,14 +30,53 @@ them.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from collections.abc import Mapping
+from dataclasses import dataclass, field
+from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from emergent_matter_materials.bh_curve import BHCurveData
+from emergent_matter_materials.property_table import (
+    PropertyTable,
+    PropertyTableMap,
+    _require_table,
+)
 from emergent_matter_materials.property_value import PropertyValue
 from emergent_matter_materials.rotational_loss import RotationalLossData
 from emergent_matter_materials.steinmetz import SteinmetzData
-from emergent_matter_materials.validation import _validate_group_units
+from emergent_matter_materials.validation import (
+    _normalize_temperature_tables,
+    _validate_group_units,
+)
+
+#: The PropertyValue slots of ``Electromagnetic``, unit-checked on construction.
+_ELECTROMAGNETIC_SCALAR_FIELDS: frozenset[str] = frozenset(
+    {
+        "resistivity_at_20C",
+        "temp_coeff_resistivity",
+        "relative_permeability",
+        "saturation_flux",
+        "coercivity",
+        "remanence",
+        "temp_coeff_remanence",
+        "temp_coeff_coercivity",
+        "recoil_permeability",
+        "energy_product_max",
+        "core_loss",
+        "dielectric_strength",
+        "relative_permittivity",
+    }
+)
+
+#: Valid ``temperature_tables`` keys, each mapped to the slot it borrows units
+#: and range checks from. Resistivity is tabulated as ``"resistivity"``: the
+#: scalar slot's ``_at_20C`` names one condition, and a table spans many.
+_ELECTROMAGNETIC_TABLE_SLOTS: Mapping[str, str] = MappingProxyType(
+    {
+        "resistivity": "resistivity_at_20C",
+        **{s: s for s in _ELECTROMAGNETIC_SCALAR_FIELDS - {"resistivity_at_20C"}},
+    }
+)
 
 if TYPE_CHECKING:
     # Type-only: `jax` stays an optional extra (STYLE.md's lazy-import rule),
@@ -132,26 +171,18 @@ class Electromagnetic:
     dielectric_strength: PropertyValue | None = None
     relative_permittivity: PropertyValue | None = None
 
+    # Temperature dependence of the scalar slots above, keyed by property
+    # (see _ELECTROMAGNETIC_TABLE_SLOTS; resistivity is "resistivity").
+    # See property_table.py.
+    temperature_tables: Mapping[str, PropertyTable] = field(default_factory=PropertyTableMap)
+
     def __post_init__(self) -> None:
         _validate_group_units(
             self,
-            group_fields={
-                "resistivity_at_20C",
-                "temp_coeff_resistivity",
-                "relative_permeability",
-                "saturation_flux",
-                "coercivity",
-                "remanence",
-                "temp_coeff_remanence",
-                "temp_coeff_coercivity",
-                "recoil_permeability",
-                "energy_product_max",
-                "core_loss",
-                "dielectric_strength",
-                "relative_permittivity",
-            },
+            group_fields=_ELECTROMAGNETIC_SCALAR_FIELDS,
             b_optional=True,
         )
+        _normalize_temperature_tables(self, _ELECTROMAGNETIC_TABLE_SLOTS)
 
         # Positivity on the dimensional ones that ARE present
         for f_name in (
@@ -236,6 +267,10 @@ class Electromagnetic:
                 f"(field is None: material doesn't have this property)"
             )
         return pv
+
+    def table(self, s_field_name: str) -> PropertyTable:
+        """The temperature table for a scalar slot; raises if none is attached."""
+        return _require_table(self, s_field_name)
 
     @property
     def d_resistivity_at_20C_ohm_m(self) -> float:
