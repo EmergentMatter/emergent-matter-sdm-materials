@@ -1848,9 +1848,10 @@ titanium_6al_4v = Material(
 # analysis: ρ(T) drives skin depth δ = √(2ρ/(ωμ)) and AC/DC resistance ratios,
 # and the JAX-traceable d_resistivity_at_T callable comes for free from the
 # resistivity + temp-coeff pair) plus density (for specific-loss → volumetric
-# conversion). Thermal (k ≈ 234 W/(m·K)) and mechanical properties are a clean
-# future add (CRC / Aluminum Association): left out here to keep the entry to
-# directly verified Tier-1 values rather than padding.
+# conversion). 2026-10-19: modulus, conductivity, CTE and melting point added from
+# the wire maker's (California Fine Wire) product page; the Aluminum Association
+# figure k ~ 234 W/(m K) disagrees with its 229 and is recorded on that entry.
+# AA / ASTM data would outrank a single vendor page if it turns up.
 aluminum_1350_ec = Material(
     s_id="aluminum_1350_ec",
     s_description="EC-grade 1350 aluminium electrical conductor (>=99.5% Al), "
@@ -1859,13 +1860,17 @@ aluminum_1350_ec = Material(
     s_specification="Aluminium 1350 (EC grade), 61.0% IACS per IEC 60889 "
     "(equiv. ASTM B230 wire / B233 redraw rod / B231 AAC)",
     s_catalog_version=_S_CATALOG_VERSION,
-    s_last_reviewed="2026-06-17",
+    s_last_reviewed="2026-10-19",
     thermal=Thermal(
         thermal_conductivity=_PV(
             d_value=229.0,
             s_units="W/(m*K)",
             s_source=_CFW_AL_1350 + " -- Thermal Conductivity 2.290000 W/cm/C",
             s_condition="temperature not stated",
+            s_notes=(
+                "Aluminum Association data for 1350 is about 234 W/(m K), 2% above this "
+                "vendor value. The same page's specific-heat line has a garbled unit."
+            ),
             s_confidence="datasheet",
         ),
         thermal_expansion=_PV(
@@ -1879,10 +1884,11 @@ aluminum_1350_ec = Material(
             d_value=657.0,
             s_units="C",
             s_source=_CFW_AL_1350 + " -- Melting Point 657.00 C",
-            s_condition="single value as published (no solidus/liquidus pair)",
+            s_condition="single value as published; for 1350 it matches the liquidus",
             s_confidence="datasheet",
             s_notes=(
-                "Specific heat on the same page (0.241 cal/g, unit printed without /C) is not "
+                "No solidus is published, so solidus/liquidus stay empty. Specific heat on the "
+                "same page (0.241 cal/g, unit printed without /C) is not "
                 "stored: the unit is garbled."
             ),
         ),
@@ -1892,7 +1898,7 @@ aluminum_1350_ec = Material(
             d_value=68900000000.0,
             s_units="Pa",
             s_source=_CFW_AL_1350 + " -- Youngs Modulus 10 x 10^6 psi",
-            s_condition="room temperature, temper not stated",
+            s_condition="temperature and temper not stated",
             s_confidence="datasheet",
             s_notes="10 x 10^6 psi = 68.9 GPa. The producer page gives no Poisson ratio.",
         ),
