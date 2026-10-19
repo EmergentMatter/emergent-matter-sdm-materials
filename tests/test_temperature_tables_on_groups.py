@@ -350,3 +350,27 @@ def test_positional_thermal_construction_keeps_its_old_meaning():
     """New Thermal fields are declared after emissivity, so the 9th positional arg is unchanged."""
     args = [None] * 8 + [_pv(0.5, "")]
     assert Thermal(*args).emissivity.d_value == 0.5
+
+
+def test_yield_and_uts_tables_that_cross_between_rows_are_rejected():
+    """No temperature is shared where they cross; interpolation has to catch it."""
+    with pytest.raises(ValueError, match=r"yield_stress .* > ultimate_tensile .* at 200.0 C"):
+        Structural(
+            temperature_tables={
+                # Yield interpolates to 398 MPa at 200 C; UTS has a 200 MPa row there.
+                "yield_stress": _table([(25.0, 300e6), (400.0, 510e6)], "Pa"),
+                "ultimate_tensile": _table([(25.0, 500e6), (200.0, 200e6), (400.0, 600e6)], "Pa"),
+            }
+        )
+
+
+def test_yield_above_uts_outside_their_overlap_is_not_compared():
+    structural = Structural(
+        temperature_tables={
+            "yield_stress": _table([(25.0, 300e6), (300.0, 250e6)], "Pa"),
+            # Overlap is 25-300 C; the UTS row at 900 C is below the yield
+            # table's values but no yield data exists there.
+            "ultimate_tensile": _table([(25.0, 500e6), (300.0, 400e6), (900.0, 100e6)], "Pa"),
+        }
+    )
+    assert len(structural.temperature_tables) == 2

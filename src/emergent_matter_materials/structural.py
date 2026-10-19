@@ -131,6 +131,36 @@ class StructuralStrength:
     d_derate_factor: float | None = None
 
 
+def _check_yield_below_uts(yield_table: PropertyTable, uts_table: PropertyTable) -> None:
+    """Raise if yield exceeds UTS anywhere both tables cover.
+
+    Both curves are piecewise linear, so their difference is linear between
+    consecutive breakpoints of either table. Checking every row temperature
+    of either table inside the overlap therefore catches any crossing,
+    including one between rows that no single temperature shares.
+    """
+    d_lo = max(yield_table.d_temperatures_C[0], uts_table.d_temperatures_C[0])
+    d_hi = min(yield_table.d_temperatures_C[-1], uts_table.d_temperatures_C[-1])
+    if d_lo > d_hi:
+        return  # no overlap: nothing to compare
+    d_temps = sorted(
+        {
+            t
+            for t in (*yield_table.d_temperatures_C, *uts_table.d_temperatures_C)
+            if d_lo <= t <= d_hi
+        }
+    )
+    for d_t in d_temps:
+        d_yield = yield_table.value_at(d_t)
+        d_uts = uts_table.value_at(d_t)
+        if d_yield > d_uts:
+            raise ValueError(
+                f"Structural.temperature_tables: yield_stress ({d_yield} Pa) > "
+                f"ultimate_tensile ({d_uts} Pa) at {d_t} C (interpolated where a table has "
+                f"no row there). This is physically impossible; check the source citations."
+            )
+
+
 @dataclass(frozen=True)
 class Structural:
     """Structural properties: all fields optional (Tier-1-only policy).
@@ -222,23 +252,12 @@ class Structural:
                 f"This is physically impossible; check the source citations."
             )
 
-        # The same ordering at every temperature both tables share. The
-        # per-row checks in _normalize_temperature_tables see one table at
-        # a time, so this cross-table invariant has to live here.
+        # The same ordering across the temperature range both tables cover.
+        # The per-row checks in _normalize_temperature_tables see one table
+        # at a time, so this cross-table invariant has to live here.
         tables = self.temperature_tables
         if "yield_stress" in tables and "ultimate_tensile" in tables:
-            uts_by_T = {
-                p.d_temperature_C: p.value.d_value
-                for p in self.temperature_tables["ultimate_tensile"].points
-            }
-            for p in self.temperature_tables["yield_stress"].points:
-                d_uts = uts_by_T.get(p.d_temperature_C)
-                if d_uts is not None and p.value.d_value > d_uts:
-                    raise ValueError(
-                        f"Structural.temperature_tables: yield_stress ({p.value.d_value} Pa) > "
-                        f"ultimate_tensile ({d_uts} Pa) at {p.d_temperature_C} C. "
-                        f"This is physically impossible; check the source citations."
-                    )
+            _check_yield_below_uts(tables["yield_stress"], tables["ultimate_tensile"])
 
     # ── Solver-hot-path numeric accessors (raise on missing)
 

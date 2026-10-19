@@ -13,10 +13,10 @@ override with a required reason in ``Material.derivation``. A consumer
 can ask of any field whether it is inherited or overridden, by what, and
 why.
 
-**Always a new id.** A derived material never takes its base's ``s_id``.
-Two entries under one id would make which data a consumer gets depend on
-which package registered last; a new id makes the choice explicit at
-every call site.
+**Always a new id.** A derived material never takes its base's ``s_id``,
+or any id already registered in ``MATERIALS``. Two entries under one id
+would make which data a consumer gets depend on which package registered
+last; a new id makes the choice explicit at every call site.
 
 **Pinned to the base it was reviewed against.** Inherited data flows in
 from whatever base is installed, so an upstream revision would otherwise
@@ -24,7 +24,10 @@ change a derived entry with nobody looking. Each derivation states the
 ``material_fingerprint`` of the base it was reviewed against; when the
 installed base differs, ``derive_material`` raises and prints the new
 fingerprint, like a lockfile. Re-review the overrides against the new
-base, then update the expected fingerprint.
+base, then update the expected fingerprint. The fingerprint covers
+populated data only: version strings, review dates, and absent fields
+are left out, so a release that only bumps bookkeeping or adds an
+optional field never forces a re-review.
 
 **What an override can target** (``FieldOverride.s_path``):
 
@@ -87,6 +90,12 @@ _TABLE_KEYS: dict[str, frozenset[str]] = {
     "thermal": frozenset(_THERMAL_TABLE_SLOTS),
     "electromagnetic": frozenset(_ELECTROMAGNETIC_TABLE_SLOTS),
 }
+
+#: Bookkeeping keys the fingerprint ignores: they change on releases and
+#: reviews without any data changing.
+_FINGERPRINT_IGNORED_KEYS: frozenset[str] = frozenset(
+    {"s_catalog_version", "s_last_reviewed", "s_base_catalog_version"}
+)
 
 #: Hex digits kept from the SHA-256 fingerprint: short enough to paste,
 #: long enough that an accidental collision is not a practical concern.
@@ -247,13 +256,38 @@ class Derivation:
         return bool(self.overrides_for(s_path))
 
 
-def material_fingerprint(material: Material) -> str:
-    """A short, stable hash of a material's full content, for pinning a derivation's base.
+def _canonical_data(node: Any) -> Any:
+    """``node`` with bookkeeping and absent values stripped, for fingerprinting.
 
-    Computed from the canonical JSON of ``dataclasses.asdict(material)``,
-    so any change to any value, source, condition, or table row changes it.
+    Drops the version and review-date keys at every depth, and every None
+    or empty value, so the fingerprint moves only when populated data
+    does. A schema release that adds an optional field, or a catalog
+    release that bumps a version or a review date, leaves it unchanged.
     """
-    s_canonical = json.dumps(dataclasses.asdict(material), sort_keys=True, default=repr)
+    if isinstance(node, dict):
+        out = {}
+        for s_key, value in node.items():
+            if s_key in _FINGERPRINT_IGNORED_KEYS:
+                continue
+            canonical = _canonical_data(value)
+            if canonical is None or canonical == {} or canonical == []:
+                continue
+            out[s_key] = canonical
+        return out
+    if isinstance(node, (list, tuple)):
+        return [_canonical_data(item) for item in node]
+    return node
+
+
+def material_fingerprint(material: Material) -> str:
+    """A short, stable hash of a material's populated data, for pinning a derivation's base.
+
+    Any change to a value, unit, source, condition, confidence, note, or
+    table row changes it. Version strings, review dates, and absent
+    (None or empty) fields don't, so a release that only bumps
+    bookkeeping or adds an optional field never forces a re-review.
+    """
+    s_canonical = json.dumps(_canonical_data(dataclasses.asdict(material)), sort_keys=True)
     return hashlib.sha256(s_canonical.encode("utf-8")).hexdigest()[:_N_FINGERPRINT_HEX]
 
 
@@ -387,7 +421,8 @@ def derive_material(
 
     Args:
         base: The material to derive from (typically an open-source entry).
-        s_id: The new material's id. Must differ from ``base.s_id``.
+        s_id: The new material's id. Must differ from ``base.s_id`` and
+            from every id already in ``MATERIALS``.
         overrides: The changes. Each target may appear once (single table
             rows at distinct temperatures count separately). All overrides
             for a group apply together, so their order doesn't matter.
@@ -409,7 +444,8 @@ def derive_material(
     Raises:
         TypeError: ``base`` is not a ``Material`` or an override is not a
             ``FieldOverride``.
-        ValueError: ``s_id`` equals the base's, the base's fingerprint
+        ValueError: ``s_id`` equals the base's or any registered catalog
+            id, the base's fingerprint
             doesn't match, overrides conflict or remove nothing, an
             override needs a group that can't be created, or a rebuilt
             group fails its own validation.
@@ -428,6 +464,13 @@ def derive_material(
         raise ValueError(
             f"derive_material: s_id {s_id!r} equals the base's. A derived material always "
             f"gets a new id so it never shadows its base."
+        )
+    from emergent_matter_materials.accessors import MATERIALS
+
+    if s_id in MATERIALS:
+        raise ValueError(
+            f"derive_material: s_id {s_id!r} is already a catalog entry, and registering the "
+            f"derived material would overwrite it. Pick an id no entry uses."
         )
     if not overrides:
         raise ValueError(

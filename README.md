@@ -150,10 +150,11 @@ from emergent_matter_materials import MATERIALS, FieldOverride, PropertyTable, d
 
 ours = derive_material(
     MATERIALS["stainless_316"],
-    s_id="em_stainless_316",  # always a new id: a derived entry never shadows its base
+    s_id="em_stainless_316",  # a new id: never the base's, never any registered entry's
     # material_fingerprint() of the base when these overrides were reviewed. If the
-    # open-source entry changes, this raises and prints the new value to re-review.
-    s_expected_base_fingerprint="d6f653c71aae28e3",
+    # open-source entry's data changes, this raises and prints the new value to
+    # re-review; version and review-date bumps alone don't change it.
+    s_expected_base_fingerprint="83ad259a17ea177a",
     overrides=[
         FieldOverride(
             "thermal.temperature_tables.thermal_conductivity",

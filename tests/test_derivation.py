@@ -484,3 +484,47 @@ def test_removals_never_leave_an_empty_group():
 def test_wrong_argument_types_raise_type_errors_that_name_the_field(call, match):
     with pytest.raises(TypeError, match=match):
         call()
+
+
+# ── PR review: fingerprint scope, registered-id collisions ────────────────
+
+
+def test_fingerprint_ignores_version_and_review_date_bumps():
+    base = _base()
+    bumped = dataclasses.replace(base, s_catalog_version="9.9.9", s_last_reviewed="2030-01-01")
+    assert material_fingerprint(bumped) == material_fingerprint(base)
+
+
+def test_fingerprint_ignores_absent_fields_so_a_new_optional_field_changes_nothing():
+    """A schema release adding an optional field adds a None or empty value to asdict()."""
+    from emergent_matter_materials.derivation import _canonical_data
+
+    before = {"structural": {"density": {"d_value": 7990.0}}, "derivation": None}
+    after = {
+        **before,
+        "structural": {**before["structural"], "new_slot": None, "new_tables": {}},
+        "new_group": None,
+    }
+    assert _canonical_data(after) == _canonical_data(before)
+
+
+def test_fingerprint_moves_when_a_source_citation_changes():
+    base = _base()
+    k = base.thermal.thermal_conductivity
+    recited = dataclasses.replace(
+        base,
+        thermal=dataclasses.replace(
+            base.thermal,
+            thermal_conductivity=dataclasses.replace(k, s_source=k.s_source + " rev B"),
+        ),
+    )
+    assert material_fingerprint(recited) != material_fingerprint(base)
+
+
+def test_derived_id_cannot_take_another_catalog_entrys_id():
+    assert "aluminum_6061_t6" in MATERIALS
+    with pytest.raises(ValueError, match="'aluminum_6061_t6' is already a catalog entry"):
+        _derive(
+            _override("thermal.thermal_conductivity", _pv(15.0, "W/(m*K)")),
+            s_id="aluminum_6061_t6",
+        )
