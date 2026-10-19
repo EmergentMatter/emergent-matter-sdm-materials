@@ -11,7 +11,7 @@ fields and N/A-by-physics gaps explained in s_notes:
 |---------------------|---------------|------------------------------------|
 | peek_unfilled       | 12            | Victrex 450G TDS (March 2026)      |
 | pei_ultem_1010      | 11            | SABIC Ultem 1010 Americas TDS 2017 |
-| nylon12_sls         | 7             | EOS PA 2200 (Jul 2022)             |
+| nylon12_sls         | 10            | EOS PA 2200 (Jul 2022), EOS PI 03.10 |
 | pla_3dprint         | 8             | Prusament PLA TDS v1.1 (Feb 2022)  |
 | nomex_410           | 6             | DuPont K-20612-2 (04/16)           |
 | mw_pai_class_200    | 13            | Solvay Torlon 4203L (Oct 2014)     |
@@ -71,6 +71,9 @@ against the actual cited PDFs, not third-party hints):
 - EOS PA 2200 TDS (Jul 2022) does NOT publish thermal_conductivity,
   specific_heat, CTE, or glass_transition. Earlier v0.1.x values
   for these came from MatWeb (Tier 3) and are correctly removed.
+  (2026-10-19: conductivity, specific heat and CTE are now stored
+  from the superseded EOS Product Information 03.10, which did
+  publish them; glass_transition is still a gap.)
   The current TDS DOES publish Z-direction tensile data (Modulus
   1650 MPa, Strength 42 MPa, strain at break 4%): schema is
   isotropic-scalar so this anisotropy detail has no slot.
@@ -143,6 +146,30 @@ from emergent_matter_materials.material import Material
 from emergent_matter_materials.property_value import PropertyValue as _PV
 from emergent_matter_materials.structural import Structural
 from emergent_matter_materials.thermal import Thermal
+
+_EOS_PA2200_PI_2010 = (
+    "EOS GmbH, 'Product Information PA 2200', AHO / 03.10 (date inferred: March 2010 from '03.10'; "
+    "the PDF metadata says 2011), EOS's own document, copy "
+    "retrieved 2026-10-16 from "
+    "https://www.sculpteo.com/media/imagecontent/PA2200_Product_information_03-10_en.pdf "
+    "(hosted by Sculpteo). The current eos.info MDS no longer lists these thermal rows."
+)
+_SABIC_ULTEM_1010_2026 = (
+    "SABIC 'ULTEM Resin 1010' technical data sheet, Revision 20260505, retrieved 2026-10-16 from "
+    "https://materialfinder.sabic-specialties.com/document-download/f2bca2eb-73de-eb11-810a-005056857ef3"
+)
+_BASF_ELASTOLLAN_PHYS = (
+    "BASF 'Elastollan Physical Properties' brochure (p.31, undated), "
+    "retrieved 2026-10-16 from https://www.basf.com/dam/jcr:19c11827-1bc0-3b0f-a3f4-4fc2b986d54f/"
+    "Elastollan_Properties-Physical-Properties.pdf"
+)
+_TORLON_DESIGN_GUIDE = (
+    "Solvay Specialty Polymers 'Torlon PAI Design Guide', D 03/2007, R 07/2015, Version 5.0, p.15 "
+    "Table 12 "
+    "'Specific heat of Torlon PAI resins', copy retrieved 2026-10-16 from "
+    "https://drakeplastics.com/wp-content/uploads/2020/01/Torlon-PAI-Design-Guide_EN-227547.pdf "
+    "(hosted by Drake Plastics)"
+)
 
 _S_CATALOG_VERSION = "1.0.0"
 _S_LAST_REVIEWED = "2026-05-24"
@@ -477,8 +504,15 @@ pei_ultem_1010 = Material(
         "SABIC Ultem Resin 1010 (Americas region): amorphous, transparent, general-purpose PEI"
     ),
     s_catalog_version=_S_CATALOG_VERSION,
-    s_last_reviewed=_S_LAST_REVIEWED,
+    s_last_reviewed="2026-10-19",
     structural=Structural(
+        poisson_ratio=_PV(
+            d_value=0.36,
+            s_units="",
+            s_source=_SABIC_ULTEM_1010_2026 + " -- Poisson's Ratio 0.36 (ASTM E132)",
+            s_condition="ASTM E132",
+            s_confidence="datasheet",
+        ),
         youngs_modulus=_PV(
             d_value=3.58e9,
             s_units="Pa",
@@ -486,13 +520,14 @@ pei_ultem_1010 = Material(
             + " -- Tensile Modulus, 5 mm/min = 3580 MPa (ASTM D 638)",
             s_condition="5 mm/min, ASTM D 638",
             s_confidence="datasheet",
+            s_notes=(
+                "TDS revision 20260505 (cited for the Poisson ratio) lists 3350 MPa (ASTM D638); "
+                "this 2017-revision value is kept pending a decision on which revision wins."
+            ),
         ),
-        # v0.7.2: poisson_ratio REMOVED. v0.7.0 added 0.36 citing SABIC
-        # Ultem 1010 TDS, but v0.7.2 URL-fetch validation confirmed the
-        # actual TDS does NOT publish a Poisson ratio row. The v0.7.0
-        # s_notes even said "(typical for amorphous PEI)": that was a
-        # red flag we missed. Under strict Tier-1, the field is removed.
-        # Not yet sourced at Tier 1.
+        # Poisson ratio: v0.7.2 removed 0.36 because the 2017 TDS has no
+        # Poisson row. 2026-10-19: restored from TDS revision 20260505, which
+        # does publish "Poisson's Ratio 0.36 - ASTM E132".
         yield_stress=_PV(
             d_value=110e6,
             s_units="Pa",
@@ -652,7 +687,7 @@ nylon12_sls = Material(
     s_category="polymer",
     s_specification="EOS PA 2200 (also Formlabs Nylon 12, HP MJF PA12)",
     s_catalog_version=_S_CATALOG_VERSION,
-    s_last_reviewed="2026-06-22",
+    s_last_reviewed="2026-10-19",
     structural=Structural(
         youngs_modulus=_PV(
             d_value=1.65e9,
@@ -732,6 +767,40 @@ nylon12_sls = Material(
         ),
     ),
     thermal=Thermal(
+        thermal_conductivity=_PV(
+            d_value=0.144,
+            s_units="W/(m*K)",
+            s_source=_EOS_PA2200_PI_2010
+            + " -- Thermal conductivity vertical to sintered layers 0.144 W/mK (DIN 52616)",
+            s_condition="perpendicular to the sintered layers",
+            s_confidence="datasheet",
+            s_notes="Parallel to the layers: 0.127 W/mK on the same table.",
+        ),
+        specific_heat=_PV(
+            d_value=2350.0,
+            s_units="J/(kg*K)",
+            s_source=_EOS_PA2200_PI_2010 + " -- Specific heat 2.35 J/gK (DIN 51005)",
+            s_condition="DIN 51005; temperature and specimen form not stated",
+            s_notes=(
+                "Listed under 'General Properties' with no temperature. High for PA 12 at "
+                "room temperature (about 1.2-1.7 J/(g K)), so probably measured hot. From a "
+                "superseded sheet; the current MDS no longer reports it."
+            ),
+            s_confidence="datasheet",
+        ),
+        thermal_expansion=_PV(
+            d_value=0.000109,
+            s_units="1/K",
+            s_source=_EOS_PA2200_PI_2010
+            + " -- Coefficient of linear thermal expansion 1.09 x10-4 /K (ISO 11359 / DIN 53752-A)",
+            s_condition="ISO 11359 / DIN 53752-A; temperature and specimen form not stated",
+            s_notes="From a superseded sheet (2010); the current MDS no longer reports it.",
+            s_confidence="datasheet",
+        ),
+        # 2026-10-19: max_operating_temp still None. The 2010 Product
+        # Information's "-40 C till +80 C under steady stress" is a generic
+        # PA 12 statement, not a PA 2200 rating, and sits above the current
+        # MDS HDT at 1.80 MPa (64/57 C X/Z).
         # v0.7.2: max_operating_temp REMOVED. v0.2.x stored 160 C citing
         # EOS "continuous use temperature", but v0.7.2 URL-fetch validation
         # across 5 EOS PA 2200 revisions confirmed no such scalar exists.
@@ -951,7 +1020,7 @@ mw_pai_class_200 = Material(
         "Torlon 4203L TDS."
     ),
     s_catalog_version=_S_CATALOG_VERSION,
-    s_last_reviewed=_S_LAST_REVIEWED,
+    s_last_reviewed="2026-10-19",
     structural=Structural(
         youngs_modulus=_PV(
             d_value=4.48e9,
@@ -1132,6 +1201,18 @@ mw_pai_class_200 = Material(
         ),
     ),
     thermal=Thermal(
+        specific_heat=_PV(
+            d_value=1012.0,
+            s_units="J/(kg*K)",
+            s_source=_TORLON_DESIGN_GUIDE + " -- 4203L, 25 C: 0.242 cal/gm C",
+            s_condition="25 C, DSC, bulk PAI resin (not finished wire film)",
+            s_confidence="datasheet",
+            s_notes=(
+                "From the Torlon design guide, not the TDS; bulk 4203L resin, as the sibling "
+                "Torlon values. 0.242 cal/(g C) x 4184 = 1012 J/(kg K). Same table: 1247 at "
+                "100 C, 1515 at 200 C, 1648 at 250 C."
+            ),
+        ),
         thermal_conductivity=_PV(
             d_value=0.26,
             s_units="W/(m*K)",
@@ -1550,7 +1631,7 @@ kapton_hn = Material(
         "Available 12.7-125 um."
     ),
     s_catalog_version=_S_CATALOG_VERSION,
-    s_last_reviewed=_S_LAST_REVIEWED,
+    s_last_reviewed="2026-10-19",
     structural=Structural(
         youngs_modulus=_PV(
             d_value=2.76e9,
@@ -1827,7 +1908,22 @@ tpu_elastollan_1195a = Material(
         "product range brochure"
     ),
     s_catalog_version=_S_CATALOG_VERSION,
-    s_last_reviewed=_S_LAST_REVIEWED,
+    s_last_reviewed="2026-10-19",
+    thermal=Thermal(
+        thermal_conductivity=_PV(
+            d_value=0.3,
+            s_units="W/(m*K)",
+            s_source=_BASF_ELASTOLLAN_PHYS
+            + " -- Thermal conductivity, 23 C, 1195 A 10 / 1195 A 15 column: 0.30 W/(m K) (DIN "
+            "52612-1)",
+            s_condition="23 C, DIN 52612-1, specimens tempered 20 h at 100 C",
+            s_notes=(
+                "Above the 0.19-0.25 W/(m K) the same brochure's general table gives across "
+                "the TPU range; this is the value printed in the 1195 A column."
+            ),
+            s_confidence="datasheet",
+        ),
+    ),
     structural=Structural(
         ultimate_tensile=_PV(
             d_value=55e6,
@@ -1851,8 +1947,88 @@ tpu_elastollan_1195a = Material(
             s_confidence="datasheet",
         ),
     ),
-    # No thermal group: the brochure publishes no Tg, Vicat, or service-temperature
-    # row for the 11 Series, and the grade-specific TDS was not obtainable.
+    # Thermal: only the conductivity (BASF Physical Properties brochure). No Tg,
+    # Vicat, or service-temperature row for the 11 Series is published.
+)
+
+
+# ── Bambu Lab TPU 95A HF: FDM-printed Shore 95A TPU filament (high-flow grade)
+#
+# Printed-part values from the producer's own TDS. Unlike tpu_elastollan_1195a
+# (injection-moulded granulate, no modulus published), this sheet gives a
+# Young's modulus on printed specimens, per print direction. No Poisson's
+# ratio, glass transition, thermal conductivity or CTE is published.
+
+_BAMBU_TPU_95A_HF_TDS = (
+    "Bambu Lab, 'Bambu Filament Technical Data Sheet V1.0: TPU 95A HF', retrieved "
+    "2026-10-16 from https://store.bblcdn.eu/s8/default/16df21baf482453999b3dbb61cc110e7/"
+    "Bambu_TPU_95A_HF_Technical_Data_Sheet.pdf. p.2 'Physical Properties' and "
+    "'Mechanical Properties' tables; specimens printed at 230 C nozzle, 35 C bed, "
+    "140 mm/s, 100% infill, annealed and dried at 70 C for 12 h before testing (p.3)"
+)
+
+tpu_95a_hf_bambu = Material(
+    s_id="tpu_95a_hf_bambu",
+    s_description="Bambu Lab TPU 95A HF: FDM-printed Shore 95A thermoplastic polyurethane filament",
+    s_category="elastomer",
+    s_specification=(
+        "Bambu Lab TPU 95A HF, 1.75 mm FDM filament; typical values on FDM-printed, "
+        "100% infill specimens per the Bambu TDS V1.0"
+    ),
+    s_catalog_version=_S_CATALOG_VERSION,
+    s_last_reviewed="2026-10-19",
+    structural=Structural(
+        youngs_modulus=_PV(
+            d_value=9.8e6,
+            s_units="Pa",
+            s_source=_BAMBU_TPU_95A_HF_TDS
+            + " -- Young's Modulus (X-Y) = 9.8 +/- 0.7 MPa (ISO 527, GB/T 1040)",
+            s_condition=(
+                "X-Y print direction, ISO 527, printed specimen, annealed and dried 70 C 12 h"
+            ),
+            s_confidence="datasheet",
+            s_notes=(
+                "Z direction on the same table: 7.4 +/- 0.6 MPa. The specimens were annealed "
+                "and dried at 70 C for 12 h, which the TDS itself does not recommend for "
+                "prints, so as-printed parts may differ. TPU stiffens "
+                "with rate and softens with strain; this is the small-strain tensile "
+                "slope, so linear FEA holds only for small deflections. Other 95A "
+                "filaments differ widely (Ultimaker TPU 95A TDS v2.00: 67 MPa XY per "
+                "ASTM D3039), so use the producer's own value."
+            ),
+        ),
+        ultimate_tensile=_PV(
+            d_value=27.3e6,
+            s_units="Pa",
+            s_source=_BAMBU_TPU_95A_HF_TDS
+            + " -- Tensile Strength (X-Y) = 27.3 +/- 0.8 MPa (ISO 527, GB/T 1040)",
+            s_condition=(
+                "X-Y print direction, ISO 527, printed specimen, annealed and dried 70 C 12 h"
+            ),
+            s_confidence="datasheet",
+            s_notes=(
+                "Z: 22.3 +/- 0.6 MPa. Elongation at break > 650% (X-Y), > 480% (Z). "
+                "TPU has no yield point, so yield_stress stays None."
+            ),
+        ),
+        density=_PV(
+            d_value=1220.0,
+            s_units="kg/m^3",
+            s_source=_BAMBU_TPU_95A_HF_TDS + " -- Density = 1.22 g/cm3 (ISO 1183)",
+            s_condition="ISO 1183",
+            s_confidence="datasheet",
+        ),
+    ),
+    thermal=Thermal(
+        melting_temp=_PV(
+            d_value=183.0,
+            s_units="C",
+            s_source=_BAMBU_TPU_95A_HF_TDS + " -- Melting Temperature = 183 C (DSC, 10 C/min)",
+            s_condition="DSC, 10 C/min",
+            s_confidence="datasheet",
+            s_notes="The TDS lists glass transition, Vicat and HDT as N/A.",
+        ),
+    ),
 )
 
 
@@ -1866,6 +2042,7 @@ CATALOG: dict[str, Material] = {
     kapton_hn.s_id: kapton_hn,
     stycast_2850ft.s_id: stycast_2850ft,
     tpu_elastollan_1195a.s_id: tpu_elastollan_1195a,
+    tpu_95a_hf_bambu.s_id: tpu_95a_hf_bambu,
     nomex_410.s_id: nomex_410,
     mw_pai_class_200.s_id: mw_pai_class_200,
     mw_pur_class_130.s_id: mw_pur_class_130,

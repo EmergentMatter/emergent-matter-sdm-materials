@@ -70,9 +70,9 @@ and inspected field-by-field. Findings:
 
   Fields that stay None on Structural for brittle sintered NdFeB:
   these are N/A-BY-PHYSICS, not sourcing gaps:
-   - ``youngs_modulus``: sintered NdFeB is a brittle intermetallic;
-     the elastic modulus is physically meaningful for the linear
-     range, but Arnold publishes no number. Single-crystal C_ij DO
+   - ``youngs_modulus``: Arnold publishes no number. 2026-10-19:
+     stored as the MMPA 0100-00 Table IV-3 class value (152 GPa,
+     all sintered Nd-Fe-B, confidence 'standard'). Single-crystal C_ij DO
      exist (Hirosawa, Tokuhara, Sagawa, Yamamoto, Fujimura 1986
      J. Appl. Phys. 59(3):873) and an aggregate Voigt-Reuss-Hill E
      ~150-160 GPa could be derived, but a derived value would
@@ -233,8 +233,8 @@ passes.
      electromagnetic.remanence, electromagnetic.coercivity (HcJ min),
      electromagnetic.temp_coeff_remanence α(Br).
    - smco_2_17 ALSO has structural.youngs_modulus (140 GPa, Arnold-
-     published: sintered NdFeB does NOT have an Arnold-published E,
-     stays None at Tier 1).
+     published; sintered NdFeB has no Arnold-published E and carries
+     the MMPA class value instead, 2026-10-19).
 
   Fields re-confirmed N/A-by-physics or sourcing-gap (no change):
    - electromagnetic.resistivity_at_20C: Arnold sheet row is BLANK
@@ -264,8 +264,8 @@ passes.
      handbook/phase-diagram numbers, not vendor-published, so Tier-1
      policy blocks them. Sourcing gap.
    - structural.youngs_modulus: Arnold publishes for SmCo (140 GPa,
-     stored) but NOT for sintered NdFeB; the value for NdFeB stays
-     None at Tier 1 per the existing N/A-BY-PHYSICS convention
+     stored) but NOT for sintered NdFeB; NdFeB now carries the MMPA
+     0100-00 class value (152 GPa, 2026-10-19) rather than a value derived
      (single-crystal C_ij measurements exist but derived V-R-H E
      would be confidence='derived' = Tier 4, forbidden).
    - structural.poisson_ratio, .yield_stress, .ultimate_tensile,
@@ -476,6 +476,13 @@ _SHINETSU_R32HS_SHEET = (
 # definition citation + downstream-use context.
 
 
+_MMPA_0100_00 = (
+    "Magnetic Materials Producers Association, 'MMPA Standard No. 0100-00: Standard "
+    "Specifications for Permanent Magnet Materials', copy retrieved 2026-10-16 from "
+    "https://www.duramag.com/pdf/MMPA_0100-00.pdf (hosted by Dura Magnetics)"
+)
+
+
 def _ndfeb_recoil_permeability(
     d_value: float,
     s_primary_source: str,
@@ -626,8 +633,8 @@ def _ndfeb_structural(s_source_sheet: str) -> Structural:
       ductile yield. ``s_notes`` documents this convention.
 
     FLAGGED MISSING from Arnold sources (still TODO):
-    - ``youngs_modulus``: Arnold publishes no elastic modulus.
-      Handbook values cluster around 150-160 GPa but are not Tier 1.
+    - ``youngs_modulus``: Arnold publishes no elastic modulus; the
+      MMPA 0100-00 class value (152 GPa) is stored instead.
     - ``poisson_ratio``: Arnold publishes no Poisson ratio.
       Handbook values ~0.24 but not Tier 1.
     - ``yield_stress``, NOT APPLICABLE for brittle sintered NdFeB; no
@@ -643,6 +650,20 @@ def _ndfeb_structural(s_source_sheet: str) -> Structural:
     provided the verification for that grade.
     """
     return Structural(
+        youngs_modulus=_PV(
+            d_value=152000000000.0,
+            s_units="Pa",
+            s_source=_MMPA_0100_00
+            + " -- Table IV-3 Typical Physical Properties, Sintered Rare Earth Magnets: Nd-Fe-B "
+            "modulus of elasticity 22 x 10^6 psi, 152 x 10^9 Pa",
+            s_condition="sintered Nd-Fe-B class value, direction not given",
+            s_confidence="standard",
+            s_notes=(
+                "One value for all sintered Nd-Fe-B in the MMPA table, not per grade; Arnold's "
+                "per-grade sheets publish no modulus. The same row's CTE disagrees with Arnold's "
+                "own sheets, so CTE is not taken from it."
+            ),
+        ),
         flexural_strength=_PV(
             d_value=285e6,
             s_units="Pa",
@@ -676,10 +697,11 @@ def _ndfeb_structural(s_source_sheet: str) -> Structural:
                 "elastically with no plastic-yield region. Arnold "
                 "publishes ONLY flexural strength (ASTM C1161 3-point "
                 "bend), which IS the brittle-fracture peak-stress scalar "
-                "stored here. The None values on Structural.youngs_modulus, "
-                "poisson_ratio, yield_stress, ultimate_tensile, and "
-                "fatigue_endurance reflect this physics, NOT a sourcing "
-                "gap. (Aside: single-crystal C_ij measurements DO exist "
+                "stored here. The None values on Structural.poisson_ratio, "
+                "yield_stress, ultimate_tensile, and fatigue_endurance "
+                "reflect this physics, NOT a sourcing gap (the modulus is "
+                "the MMPA class value, see youngs_modulus). "
+                "(Aside: single-crystal C_ij measurements DO exist "
                 "for Nd2Fe14B: Hirosawa, Tokuhara, Sagawa, Yamamoto, "
                 "Fujimura 1986 J. Appl. Phys. 59(3):873, and an "
                 "aggregate Voigt-Reuss-Hill polycrystalline E in the "
@@ -971,11 +993,26 @@ def _ndfeb_high_temp_structural(
       the v0.3.0 ``flexural_strength`` slot (was ``ultimate_tensile`` in
       v0.2.4-v0.2.8 before the schema clarification).
 
-    Young's modulus, Poisson ratio, yield stress, ultimate tensile,
-    fatigue endurance: NOT in Arnold sources, stay None. See
+    Poisson ratio, yield stress, ultimate tensile, fatigue endurance:
+    NOT in Arnold sources, stay None. Young's modulus: the MMPA
+    0100-00 class value (152 GPa). See
     ``_ndfeb_structural`` docstring for full flagging notes.
     """
     return Structural(
+        youngs_modulus=_PV(
+            d_value=152000000000.0,
+            s_units="Pa",
+            s_source=_MMPA_0100_00
+            + " -- Table IV-3 Typical Physical Properties, Sintered Rare Earth Magnets: Nd-Fe-B "
+            "modulus of elasticity 22 x 10^6 psi, 152 x 10^9 Pa",
+            s_condition="sintered Nd-Fe-B class value, direction not given",
+            s_confidence="standard",
+            s_notes=(
+                "One value for all sintered Nd-Fe-B in the MMPA table, not per grade; Arnold's "
+                "per-grade sheets publish no modulus. The same row's CTE disagrees with Arnold's "
+                "own sheets, so CTE is not taken from it."
+            ),
+        ),
         flexural_strength=_PV(
             d_value=285e6,
             s_units="Pa",
@@ -1043,7 +1080,7 @@ ndfeb_n35 = Material(
     s_category="magnet",
     s_specification="Sintered NdFeB N35 (Arnold catalog N35, equiv. Hitachi NEOMAX-35 etc.)",
     s_catalog_version=_S_CATALOG_VERSION,
-    s_last_reviewed=_S_LAST_REVIEWED,
+    s_last_reviewed="2026-10-19",
     structural=_ndfeb_structural(s_source_sheet=_ARNOLD_N35_SHEET),
     electromagnetic=Electromagnetic(
         energy_product_max=_energy_product_max(
@@ -1163,7 +1200,7 @@ ndfeb_n42 = Material(
     s_category="magnet",
     s_specification="Sintered NdFeB N42 (Arnold catalog N42, equiv. Hitachi NEOMAX-42 etc.)",
     s_catalog_version=_S_CATALOG_VERSION,
-    s_last_reviewed=_S_LAST_REVIEWED,
+    s_last_reviewed="2026-10-19",
     structural=_ndfeb_structural(s_source_sheet=_ARNOLD_N42_SHEET),
     electromagnetic=Electromagnetic(
         energy_product_max=_energy_product_max(
@@ -1247,7 +1284,7 @@ ndfeb_n50 = Material(
     s_category="magnet",
     s_specification="Sintered NdFeB N50 (Arnold catalog N50, equiv. Hitachi NEOMAX-50 etc.)",
     s_catalog_version=_S_CATALOG_VERSION,
-    s_last_reviewed=_S_LAST_REVIEWED,
+    s_last_reviewed="2026-10-19",
     structural=_ndfeb_structural(s_source_sheet=_ARNOLD_N50_SHEET),
     electromagnetic=Electromagnetic(
         energy_product_max=_energy_product_max(
@@ -1332,7 +1369,7 @@ ndfeb_n42sh = Material(
         "temperature continuous service, Arnold catalog N42SH)"
     ),
     s_catalog_version=_S_CATALOG_VERSION,
-    s_last_reviewed=_S_LAST_REVIEWED,
+    s_last_reviewed="2026-10-19",
     structural=_ndfeb_high_temp_structural(
         d_density_kg_m3=7600.0,
         s_source_sheet=_ARNOLD_N42SH_SHEET,
@@ -1425,7 +1462,7 @@ ndfeb_n42uh = Material(
     s_category="magnet",
     s_specification="Sintered NdFeB N42UH (Arnold catalog N42UH)",
     s_catalog_version=_S_CATALOG_VERSION,
-    s_last_reviewed=_S_LAST_REVIEWED,
+    s_last_reviewed="2026-10-19",
     structural=_ndfeb_high_temp_structural(
         d_density_kg_m3=7600.0,
         s_source_sheet=_ARNOLD_N42UH_SHEET,
@@ -1519,7 +1556,7 @@ ndfeb_n42eh = Material(
     s_category="magnet",
     s_specification="Sintered NdFeB N42EH (Arnold catalog N42EH)",
     s_catalog_version=_S_CATALOG_VERSION,
-    s_last_reviewed=_S_LAST_REVIEWED,
+    s_last_reviewed="2026-10-19",
     structural=_ndfeb_high_temp_structural(
         d_density_kg_m3=7500.0,
         s_source_sheet=_ARNOLD_N42EH_SHEET,
@@ -2026,7 +2063,7 @@ alnico_5_cast = Material(
         "values per the Arnold Cast ALNICO brochure Rev. C"
     ),
     s_catalog_version=_S_CATALOG_VERSION,
-    s_last_reviewed=_S_LAST_REVIEWED,
+    s_last_reviewed="2026-10-19",
     structural=Structural(
         ultimate_tensile=_PV(
             d_value=40e6,
@@ -2107,6 +2144,21 @@ alnico_5_cast = Material(
         ),
     ),
     thermal=Thermal(
+        max_operating_temp=_PV(
+            d_value=525.0,
+            s_units="C",
+            s_source=_MMPA_0100_00
+            + " -- Table II-5 Thermal Properties of Alnico Materials, Alnico 5 (R1-1-1): Max. "
+            "Service Temperature 525 C (975 F)",
+            s_condition="MMPA class value for Alnico 5",
+            s_confidence="standard",
+            s_notes=(
+                "MMPA notes the Alnico tables (II-4, II-5) are a 'composite of information "
+                "available from industry and research sources'. Arnold Cast ALNICO brochure "
+                "Rev. C (p. 6.14): above 538 C (1000 F) a metallurgical change makes magnetic "
+                "strength fall rapidly. The MMPA issue year is not printed; '-00' suggests 2000."
+            ),
+        ),
         thermal_expansion=_PV(
             d_value=11.5e-6,
             s_units="1/K",
