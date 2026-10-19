@@ -2,13 +2,13 @@
 
 **This document is auto-generated. Edit the Python catalog files, then regenerate with `uv run python scripts/generate_catalog_doc.py`. Do not hand-edit this file.**
 
-_Last generated: 2026-10-02 21:34 UTC_
+_Last generated: 2026-10-16 17:05 UTC_
 
 ---
 
 ## Summary
 
-**Catalog version:** `2.0.1` &nbsp;·&nbsp; **Package version:** `2.0.1`
+**Catalog version:** `1.0.0` &nbsp;·&nbsp; **Package version:** `1.0.0`
 
 **37 materials** &nbsp;·&nbsp; **433 PropertyValues** &nbsp;·&nbsp; **100% Tier 1**
 
@@ -151,7 +151,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 **Specification:** MARUWA AlN substrate grade AN-170 (gray), 0.25-1.5 mm thickness, per the MARUWA AlN substrates characteristic-values table
 
-**Category:** `ceramic` &nbsp;·&nbsp; **Catalog version:** 1.12.0 &nbsp;·&nbsp; **Last reviewed:** 2026-09-17
+**Category:** `ceramic` &nbsp;·&nbsp; **Catalog version:** 1.0.0 &nbsp;·&nbsp; **Last reviewed:** 2026-09-17
 
 #### Structural
 
@@ -186,7 +186,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 **Specification:** CoorsTek AD-96, nominal 96% Al2O3 sintered alumina (white), per the CoorsTek Advanced Alumina properties table
 
-**Category:** `ceramic` &nbsp;·&nbsp; **Catalog version:** 1.12.0 &nbsp;·&nbsp; **Last reviewed:** 2026-09-17
+**Category:** `ceramic` &nbsp;·&nbsp; **Catalog version:** 1.0.0 &nbsp;·&nbsp; **Last reviewed:** 2026-09-17
 
 #### Structural
 
@@ -247,7 +247,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 **Specification:** Arnold cast Alnico 5 (anisotropic, the most widely used Alnico grade), typical values per the Arnold Cast ALNICO brochure Rev. C
 
-**Category:** `magnet` &nbsp;·&nbsp; **Catalog version:** 1.8.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-17
+**Category:** `magnet` &nbsp;·&nbsp; **Catalog version:** 1.0.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-17
 
 #### Structural
 
@@ -280,7 +280,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 **Specification:** Sintered NdFeB N35 (Arnold catalog N35, equiv. Hitachi NEOMAX-35 etc.)
 
-**Category:** `magnet` &nbsp;·&nbsp; **Catalog version:** 1.8.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-17
+**Category:** `magnet` &nbsp;·&nbsp; **Catalog version:** 1.0.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-17
 
 #### Structural
 
@@ -321,7 +321,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 **Specification:** Sintered NdFeB N42 (Arnold catalog N42, equiv. Hitachi NEOMAX-42 etc.)
 
-**Category:** `magnet` &nbsp;·&nbsp; **Catalog version:** 1.8.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-17
+**Category:** `magnet` &nbsp;·&nbsp; **Catalog version:** 1.0.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-17
 
 #### Structural
 
@@ -362,7 +362,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 **Specification:** Sintered NdFeB N42EH (Arnold catalog N42EH)
 
-**Category:** `magnet` &nbsp;·&nbsp; **Catalog version:** 1.8.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-17
+**Category:** `magnet` &nbsp;·&nbsp; **Catalog version:** 1.0.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-17
 
 #### Structural
 
@@ -403,7 +403,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 **Specification:** Sintered NdFeB N42SH (dysprosium-doped variant for elevated-temperature continuous service, Arnold catalog N42SH)
 
-**Category:** `magnet` &nbsp;·&nbsp; **Catalog version:** 1.8.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-17
+**Category:** `magnet` &nbsp;·&nbsp; **Catalog version:** 1.0.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-17
 
 #### Structural
 
@@ -444,7 +444,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 **Specification:** Sintered NdFeB N42UH (Arnold catalog N42UH)
 
-**Category:** `magnet` &nbsp;·&nbsp; **Catalog version:** 1.8.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-17
+**Category:** `magnet` &nbsp;·&nbsp; **Catalog version:** 1.0.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-17
 
 #### Structural
 
@@ -485,7 +485,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 **Specification:** Sintered NdFeB N50 (Arnold catalog N50, equiv. Hitachi NEOMAX-50 etc.)
 
-**Category:** `magnet` &nbsp;·&nbsp; **Catalog version:** 1.8.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-17
+**Category:** `magnet` &nbsp;·&nbsp; **Catalog version:** 1.0.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-17
 
 #### Structural
 
@@ -526,7 +526,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 **Specification:** Arnold Recoma 28 / Sm2Co17 sintered SmCo, transverse-pressed (BHmax nominal 28 MGOe = 225 kJ/m^3, range 25-28 MGOe / 195-225 kJ/m^3)
 
-**Category:** `magnet` &nbsp;·&nbsp; **Catalog version:** 1.8.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-17
+**Category:** `magnet` &nbsp;·&nbsp; **Catalog version:** 1.0.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-17
 
 #### Structural
 
@@ -572,7 +572,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 **Specification:** Aluminium 1350 (EC grade), 61.0% IACS per IEC 60889 (equiv. ASTM B230 wire / B233 redraw rod / B231 AAC)
 
-**Category:** `metal` &nbsp;·&nbsp; **Catalog version:** 1.7.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-17
+**Category:** `metal` &nbsp;·&nbsp; **Catalog version:** 1.0.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-17
 
 #### Structural
 
@@ -1082,7 +1082,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 **Specification:** EOS PA 2200 (also Formlabs Nylon 12, HP MJF PA12)
 
-**Category:** `polymer` &nbsp;·&nbsp; **Catalog version:** 1.9.1 &nbsp;·&nbsp; **Last reviewed:** 2026-06-22
+**Category:** `polymer` &nbsp;·&nbsp; **Catalog version:** 1.0.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-22
 
 #### Structural
 
@@ -1269,7 +1269,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 **Specification:** Carpenter Hiperco 50 / ASTM A801 Alloy Type 1 / MIL A 47182, 0.014 in (0.355 mm) strip, typical magnetic anneal
 
-**Category:** `soft_magnetic` &nbsp;·&nbsp; **Catalog version:** 1.4.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-10
+**Category:** `soft_magnetic` &nbsp;·&nbsp; **Catalog version:** 1.0.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-10
 
 #### Structural
 
@@ -1318,7 +1318,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 **Specification:** Cleveland-Cliffs (formerly AK Steel) DI-MAX M-19, ASTM A677 grade 36F155, 29 gauge (0.014 in / 0.36 mm), C-5 surface insulation, fully-processed
 
-**Category:** `soft_magnetic` &nbsp;·&nbsp; **Catalog version:** 1.4.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-10
+**Category:** `soft_magnetic` &nbsp;·&nbsp; **Catalog version:** 1.0.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-10
 
 #### Structural
 
@@ -1367,7 +1367,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 **Specification:** EN 10106 M270-35A (specific core loss 2.70 W/kg at 1.5T/50Hz, 0.35 mm thickness)
 
-**Category:** `soft_magnetic` &nbsp;·&nbsp; **Catalog version:** 1.4.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-10
+**Category:** `soft_magnetic` &nbsp;·&nbsp; **Catalog version:** 1.0.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-10
 
 #### Structural
 
@@ -1414,7 +1414,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 **Specification:** Hitachi Metals / Proterial / Metglas Inc. 2605SA1 amorphous alloy ribbon (Fe78B13Si9, 25 +/- 4 micrometer thickness, standard widths 142.2 / 170.2 / 213.4 mm, longitudinal-field-annealed per manufacturer recommendation 370 deg C / 2 h / 2400 A/m); per ASTM A932/A932M-01 magnetic measurement conditions
 
-**Category:** `soft_magnetic` &nbsp;·&nbsp; **Catalog version:** 1.4.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-10
+**Category:** `soft_magnetic` &nbsp;·&nbsp; **Catalog version:** 1.0.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-10
 
 #### Structural
 
@@ -1448,7 +1448,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 **Specification:** Ferroxcube 3C95 manganese-zinc ferrite, per the Ferroxcube material specification of 2015-10-02 ('a low to medium frequency power material with low power losses from 25 to 100 C for use in power transformers at frequencies up to 0.5 MHz')
 
-**Category:** `soft_magnetic` &nbsp;·&nbsp; **Catalog version:** 1.4.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-10
+**Category:** `soft_magnetic` &nbsp;·&nbsp; **Catalog version:** 1.0.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-10
 
 #### Structural
 
@@ -1478,7 +1478,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 **Specification:** MuMETAL (Ni 80 / Mo 5 / Fe balance / Mn 0.3-0.5 / Si 0.1-0.4 wt%), meets ASTM A753 Alloy 4, UNS N14080, DIN 17745, MIL-N-14411 Composition 1; magnetic properties after final hydrogen (perfection) anneal
 
-**Category:** `soft_magnetic` &nbsp;·&nbsp; **Catalog version:** 1.4.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-10
+**Category:** `soft_magnetic` &nbsp;·&nbsp; **Catalog version:** 1.0.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-10
 
 #### Structural
 
@@ -1515,7 +1515,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 **Specification:** Vacuumschmelze VITROPERM 500 F nanocrystalline ribbon (Fe73.5Cu1Nb3Si13.5B9 / FINEMET-class atomic composition, balance Fe + 1.0 Cu + 3.0 Nb + 15.5 Si + 6.9 B in atomic-%; balance Fe + 1.3 Cu + 5.6 Nb + 8.8 Si + 1.5 B in weight-%), ribbon thickness 16 +/- 2 / 18 +/- 3 micrometers, transverse-field F-annealing route)
 
-**Category:** `soft_magnetic` &nbsp;·&nbsp; **Catalog version:** 1.4.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-10
+**Category:** `soft_magnetic` &nbsp;·&nbsp; **Catalog version:** 1.0.0 &nbsp;·&nbsp; **Last reviewed:** 2026-06-10
 
 #### Structural
 

@@ -27,6 +27,7 @@ from collections import defaultdict
 from collections.abc import Iterable
 from dataclasses import fields
 from pathlib import Path
+from typing import Any
 
 from emergent_matter_materials import MATERIALS, __catalog_version__
 from emergent_matter_materials.property_value import PropertyValue
@@ -40,6 +41,29 @@ def _extract_urls(s: str) -> list[str]:
     return _URL_RE.findall(s or "")
 
 
+def _group_pvs(grp: Any) -> Iterable[tuple[str, PropertyValue]]:
+    """Yield (field label, PropertyValue) for a group's scalars, table rows, and flow points.
+
+    Table rows and flow points each cite their own source, so each gets its
+    own manifest row; the label carries the row's temperature (and plastic
+    strain) so a reviewer can find it.
+    """
+    for f in fields(grp):
+        pv = getattr(grp, f.name)
+        if isinstance(pv, PropertyValue):
+            yield f.name, pv
+    for s_slot, table in getattr(grp, "temperature_tables", {}).items():
+        for point in table.points:
+            yield f"{s_slot}@{point.d_temperature_C}C", point.value
+    flow_curve = getattr(grp, "flow_curve", None)
+    if flow_curve is not None:
+        for point in flow_curve.points:
+            yield (
+                f"flow_curve@{point.d_temperature_C}C,eps_p={point.d_plastic_strain}",
+                point.stress,
+            )
+
+
 def _walk_pvs() -> Iterable[dict]:
     """Yield one dict per populated PropertyValue across the catalog."""
     for s_id in sorted(MATERIALS):
@@ -48,16 +72,13 @@ def _walk_pvs() -> Iterable[dict]:
             grp = getattr(m, s_group, None)
             if grp is None:
                 continue
-            for f in fields(grp):
-                pv = getattr(grp, f.name)
-                if pv is None or not isinstance(pv, PropertyValue):
-                    continue
+            for s_field, pv in _group_pvs(grp):
                 urls = _extract_urls(pv.s_source)
                 yield {
                     "material_id": s_id,
                     "material_spec": m.s_specification,
                     "group": s_group,
-                    "field": f.name,
+                    "field": s_field,
                     "d_value": pv.d_value,
                     "s_units": pv.s_units,
                     "s_condition": pv.s_condition,

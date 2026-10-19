@@ -48,7 +48,8 @@ def test_expected_units_for_unknown_property_raises():
 
 
 def test_property_units_table_has_expected_entry_count():
-    # Sanity gate: 9 structural + 13 EM + 9 thermal + 6 mfg + 9 crystal = 46
+    # Sanity gate: 10 structural + 13 EM + 12 thermal + 6 mfg + 9 crystal
+    # + 1 FlowCurve point unit (flow_stress) = 51.
     # v0.3.0 added flexural_strength to Structural for brittle materials.
     # v0.4.0 added 9 entries for CrystalAnisotropy (c11/c12/c13/c33/c44/c66,
     # burgers_vector, stacking_fault_energy, crss_initial).
@@ -56,7 +57,10 @@ def test_property_units_table_has_expected_entry_count():
     # v1.8.0 added temp_coeff_coercivity to Electromagnetic (α(HcJ) for PMs).
     # The magnet schema expansion added hardness_vickers + compressive_strength (Structural),
     # thermal_expansion_perpendicular (Thermal), energy_product_max (EM).
-    assert len(_PROPERTY_EXPECTED_UNITS) == 46
+    # The temperature-table schema added stress_relaxation_temp (Structural),
+    # solidus_temp + liquidus_temp + latent_heat_fusion (Thermal), and
+    # flow_stress (the unit of FlowPoint.stress).
+    assert len(_PROPERTY_EXPECTED_UNITS) == 51
 
 
 # ── Structural units enforcement ───────────────────────────────────────────

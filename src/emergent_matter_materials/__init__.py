@@ -41,11 +41,20 @@ from emergent_matter_materials.bh_curve import BHCurveData
 # ── Auto-load catalog at import time so MATERIALS is ready for consumers
 from emergent_matter_materials.catalog._loader import load_all as _load_catalog
 from emergent_matter_materials.crystal_anisotropy import CrystalAnisotropy
+from emergent_matter_materials.derivation import (
+    Derivation,
+    FieldOverride,
+    TableRowRemoval,
+    derive_material,
+    material_fingerprint,
+)
 from emergent_matter_materials.electromagnetic import Electromagnetic
+from emergent_matter_materials.flow_curve import FlowCurve, FlowPoint
 from emergent_matter_materials.manufacturing import Manufacturing, ProcessFit
 
 # ── Composite type
 from emergent_matter_materials.material import Material, MaterialCategory
+from emergent_matter_materials.property_table import PropertyTable, PropertyTableMap, TablePoint
 from emergent_matter_materials.property_value import (
     ConfidenceLevel,
     PropertyValue,
@@ -87,12 +96,18 @@ __all__ = [
     "ConfidenceLevel",
     "CoverageReport",
     "CrystalAnisotropy",
+    "Derivation",
     "Electromagnetic",
+    "FieldOverride",
+    "FlowCurve",
+    "FlowPoint",
     "Manufacturing",
     # Composite
     "Material",
     "MaterialCategory",
     "ProcessFit",
+    "PropertyTable",
+    "PropertyTableMap",
     "PropertyValue",
     "RotationalLossData",
     "RotationalLossForm",
@@ -102,10 +117,13 @@ __all__ = [
     # Structural strength resolver (v1.10.0)
     "StructuralStrength",
     "StructuralStrengthUnavailable",
+    "TablePoint",
+    "TableRowRemoval",
     "Thermal",
     "__catalog_version__",
     "__version__",
     "coverage",
+    "derive_material",
     # Helpers
     "expected_units_for",
     "get",
@@ -115,6 +133,7 @@ __all__ = [
     "list_aliases",
     "list_materials",
     "list_properties",
+    "material_fingerprint",
     "material_summary",
     "register_material",
 ]

@@ -33,6 +33,18 @@ Group `__post_init__` enforces `_PROPERTY_EXPECTED_UNITS`: an unexpected
 units string is a construction-time error, not a runtime surprise deep in
 a solver.
 
+Temperature-dependent data (`PropertyTable` in a group's
+`temperature_tables`, `FlowCurve` on `Structural.flow_curve`) is built from
+`PropertyValue` rows, so provenance is per point. Any code that walks a
+group's values must also walk its table rows and flow points:
+`_iter_propertyvalues` in the provenance gate, `scripts/validation_manifest.py`,
+and `scripts/generate_catalog_doc.py` already do. A walker that skips them
+lets an unsourced row ship.
+
+A downstream entry built on a catalog material uses `derive_material`
+(`derivation.py`), never a copy: inherited values stay the base's objects,
+each override carries a reason, and the derived entry always gets a new id.
+
 ## Naming conventions
 
 Shared baseline: see [STYLE.md](STYLE.md), the `d_`/`n_`/`b_`/`s_` prefix

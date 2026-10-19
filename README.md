@@ -90,7 +90,11 @@ Not every property is populated on every material: group fields are `Optional`, 
 ```
 PropertyValue   (value + units + source + condition + confidence + notes)
     ▲
-    │  composes
+    │  composes (one per scalar slot, one per table row, one per flow point)
+    │
+PropertyTable (temperature -> PropertyValue rows)  |  FlowCurve (temperature, plastic strain -> stress)
+    ▲
+    │  attach to
     │
 Structural | Electromagnetic | Thermal | Manufacturing | CrystalAnisotropy
     ▲
@@ -108,6 +112,71 @@ time. Adding a family means adding a module there; the directory listing is
 the index of what exists.
 
 Every numeric property is a `PropertyValue`, never a bare float. Convenience accessors (`d_youngs_modulus_Pa`, `d_density_kg_m3`, ...) on each group return bare floats for solver hot paths.
+
+## Temperature-dependent data
+
+Thermal and thermo-mechanical solvers need a property across a temperature range, not at one condition. `Structural`, `Thermal`, and `Electromagnetic` each carry a `temperature_tables` mapping, keyed by the scalar slot a table extends:
+
+```python
+from emergent_matter_materials import PropertyTable, Thermal
+
+thermal = Thermal(
+    temperature_tables={
+        "thermal_conductivity": PropertyTable.from_rows(
+            [(25.0, 11.4), (500.0, 18.3), (1000.0, 25.9)],  # (C, W/(m*K))
+            s_units="W/(m*K)",
+            s_source="<vendor TDS, revision, table>",
+            s_confidence="datasheet",
+        ),
+    }
+)
+thermal.table("thermal_conductivity").value_at(750.0)  # linear; raises outside 25-1000 C
+```
+
+- **Provenance is per point.** Each row is a full `PropertyValue`, because the rows of one curve often come from different tests (a room-temperature tensile test and a high-temperature resonance test, say). `from_rows` stamps one source on every row; build `TablePoint`s directly when rows differ. Every provenance gate scans every row.
+- **The slot's rules apply to every row.** A table key must be a property of its group that can vary with temperature (not a temperature itself, like `melting_temp`), in that property's units, and each row must pass the scalar slot's range check (emissivity in [0, 1], positive conductivity, ...). Resistivity is tabulated under the key `"resistivity"`.
+- **Secant tables declare it.** A mean coefficient of thermal expansion (CTE), or a mean specific heat, measured from a reference temperature sets `d_reference_temperature_C`; no other property accepts one. `bracket_at(T)` returns the rows an interpolated value came from, for citing both.
+- **Plasticity is a `FlowCurve`** on `Structural.flow_curve`: flow stress against equivalent plastic strain, one isotherm per temperature (and per strain rate, for rate-dependent data), each point sourced. The curve states whether it holds true or engineering stress-strain, or `"unspecified"` when the source doesn't say.
+- **Melting range and process-simulation scalars**: `Thermal.solidus_temp`, `Thermal.liquidus_temp`, `Thermal.latent_heat_fusion`, and `Structural.stress_relaxation_temp`.
+
+The scalar slot stays the headline value and is independent of its table. `to_jax_pytree()` flattens each table into paired arrays ready for `jnp.interp`. Note that `jnp.interp` clamps silently outside the table, where `value_at` raises; a traced solver should check the range itself.
+
+## Deriving a material from a catalog entry
+
+A downstream catalog often has better or extra data for a material this catalog already holds. `derive_material` builds a new entry from the base instead of copying it. Everything not overridden is the base's own object, so nothing is duplicated, and every override is recorded with a required reason:
+
+```python
+from emergent_matter_materials import MATERIALS, FieldOverride, PropertyTable, derive_material
+
+ours = derive_material(
+    MATERIALS["stainless_316"],
+    s_id="em_stainless_316",  # a new id: never the base's, never any registered entry's
+    # material_fingerprint() of the base when these overrides were reviewed. If the
+    # open-source entry's data changes, this raises and prints the new value to
+    # re-review; version and review-date bumps alone don't change it.
+    s_expected_base_fingerprint="83ad259a17ea177a",
+    overrides=[
+        FieldOverride(
+            "thermal.temperature_tables.thermal_conductivity",
+            PropertyTable.from_rows(
+                [(25.0, 14.0), (500.0, 19.0), (1000.0, 25.0)],
+                s_units="W/(m*K)",
+                s_source="<lab report, run, date>",
+                s_confidence="measured",
+            ),
+            s_reason="Measured on our powder lot; the base entry has no curve",
+        ),
+    ],
+    s_catalog_version="0.1.0",
+    s_last_reviewed="2026-10-16",
+)
+ours.structural is MATERIALS["stainless_316"].structural  # True: inherited, not copied
+ours.derivation.b_is_overridden("thermal.thermal_conductivity")  # False: still the base's scalar
+```
+
+An override targets a scalar slot (`"thermal.thermal_conductivity"`), the flow curve (`"structural.flow_curve"`), or a table (`"thermal.temperature_tables.<key>"`). A `PropertyTable` replaces the whole table; a `TablePoint` replaces or inserts one row and keeps every other row with its own source; a `TableRowRemoval` drops one row; `None` removes an inherited value. A removal must remove something, so a typo can't pass as an audited change. All overrides for a group are applied together and validated once by the group's own rules, so their order doesn't matter.
+
+`Material.derivation` records the base id, catalog version, and fingerprint, every override, and the base's own derivation when deriving from a derived entry, so `b_is_overridden(path)` answers across the whole chain.
 
 ## Tier 1 only: bad data is worse than no data
 

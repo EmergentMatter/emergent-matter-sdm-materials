@@ -74,8 +74,15 @@ _INFORMAL_CATEGORIES: frozenset[str] = frozenset(
 
 def _iter_propertyvalues(m: Material):
     """Yield (group_name, field_name, PropertyValue) for every populated
-    PropertyValue field on a Material across all five groups + per-process
-    Manufacturing.ProcessFit values."""
+    PropertyValue on a Material: scalar slots across all five groups,
+    per-process Manufacturing.ProcessFit values, every row of every
+    temperature table, and every FlowCurve point.
+
+    Table and flow-curve points are yielded under their slot name
+    (``thermal_conductivity``, ``flow_stress``) so the units gate looks
+    them up like a scalar; the group label carries where the point sits,
+    so a gate failure names the exact row.
+    """
     # v0.4.0: include crystal_anisotropy in the simple-group sweep.
     for s_group_name in ("structural", "electromagnetic", "thermal", "crystal_anisotropy"):
         group = getattr(m, s_group_name, None)
@@ -85,6 +92,24 @@ def _iter_propertyvalues(m: Material):
             pv = getattr(group, f.name)
             if pv is not None and isinstance(pv, PropertyValue):
                 yield (s_group_name, f.name, pv)
+
+        for s_slot, table in getattr(group, "temperature_tables", {}).items():
+            for point in table.points:
+                yield (
+                    f"{s_group_name}.temperature_tables@{point.d_temperature_C}C",
+                    s_slot,
+                    point.value,
+                )
+
+        flow_curve = getattr(group, "flow_curve", None)
+        if flow_curve is not None:
+            for point in flow_curve.points:
+                yield (
+                    f"{s_group_name}.flow_curve@{point.d_temperature_C}C,"
+                    f"eps_p={point.d_plastic_strain}",
+                    "flow_stress",
+                    point.stress,
+                )
 
     if m.manufacturing is not None:
         for s_proc_key, fit in m.manufacturing.process_fit.items():
@@ -384,3 +409,53 @@ def test_aggregator_confidence_names_aggregator():
     assert not failures, "'aggregator' entries missing aggregator name in s_source:\n" + "\n".join(
         f"  - {msg}" for msg in failures
     )
+
+
+# ── Gate coverage: the iterator reaches table rows and flow points ─────────
+
+
+def test_gate_iterator_reaches_every_table_row_and_flow_point():
+    """Gate of the gates: a curve point must be scanned like a scalar.
+
+    Without this, a non-Tier-1 or unsourced table row could ship inside an
+    otherwise clean material, because every gate above walks
+    ``_iter_propertyvalues``.
+    """
+    from emergent_matter_materials import FlowCurve, PropertyTable, Structural, Thermal
+
+    m = Material(
+        s_id="gate_probe",
+        s_description="Gate probe",
+        s_category="metal",
+        s_specification="PROBE",
+        s_catalog_version="1.0.0",
+        s_last_reviewed="2026-10-16",
+        thermal=Thermal(
+            temperature_tables={
+                "thermal_conductivity": PropertyTable.from_rows(
+                    [(25.0, 10.0), (500.0, 16.0)],
+                    s_units="W/(m*K)",
+                    s_source="Aggregator row",
+                    s_confidence="aggregator",
+                )
+            }
+        ),
+        structural=Structural(
+            flow_curve=FlowCurve.from_rows(
+                [(25.0, 0.0, 276e6)], s_source="Measured row", s_confidence="measured"
+            )
+        ),
+    )
+    seen = list(_iter_propertyvalues(m))
+    assert [(s_field, pv.s_confidence) for _, s_field, pv in seen] == [
+        ("flow_stress", "measured"),
+        ("thermal_conductivity", "aggregator"),
+        ("thermal_conductivity", "aggregator"),
+    ]
+    assert {s_group for s_group, _, _ in seen} == {
+        "structural.flow_curve@25.0C,eps_p=0.0",
+        "thermal.temperature_tables@25.0C",
+        "thermal.temperature_tables@500.0C",
+    }
+    for _, s_field, pv in seen:
+        assert pv.s_units == _PROPERTY_EXPECTED_UNITS[s_field]
