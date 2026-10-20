@@ -14,6 +14,8 @@ One repo, one composed schema, one merged catalog spanning **structural + electr
 
 Includes a **consumer-safe structural strength resolver** (`get_structural_strength(material)` / `Structural.resolve_design_strength()` / `.d_design_strength_Pa` / `.s_strength_basis`) that returns a documented allowable (`yield_stress` → `ultimate_tensile`, else fails loud) plus its **basis**, so structural tools get a usable strength for materials like SLS PA12 (basis `ultimate_tensile`, 50 MPa) without faking a yield.
 
+For the exact Formlabs PA12 grade, use `get_material("formlabs_nylon12_powder")`. Its modulus, density, and strengths all cite the Formlabs FLP12G01 V2 datasheet. The broader `nylon12_sls` entry retains its existing sources. Neither entry invents a yield or fatigue limit.
+
 **Browse the catalog as a document:** see [`docs/catalog.md`](docs/catalog.md). Auto-generated from the Python source, it lists every material's properties + source citations + conditions + confidence levels in human-readable tables. Regenerate with `uv run python scripts/generate_catalog_doc.py`.
 
 ## Install
