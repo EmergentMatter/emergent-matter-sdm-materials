@@ -2,7 +2,7 @@
 
 **This document is auto-generated. Edit the Python catalog files, then regenerate with `uv run python scripts/generate_catalog_doc.py`. Do not hand-edit this file.**
 
-_Last generated: 2026-10-20 04:19 UTC_
+_Last generated: 2026-10-25 21:39 UTC_
 
 ---
 
@@ -10,15 +10,15 @@ _Last generated: 2026-10-20 04:19 UTC_
 
 **Catalog version:** `1.0.0` &nbsp;·&nbsp; **Package version:** `1.0.0`
 
-**38 materials** &nbsp;·&nbsp; **437 PropertyValues** &nbsp;·&nbsp; **100% Tier 1**
+**38 materials** &nbsp;·&nbsp; **438 PropertyValues** &nbsp;·&nbsp; **100% Tier 1**
 
 **Confidence breakdown:**
 
 | `s_confidence` | Count | Share |
 |---|---:|---:|
 | `measured` | 8 | 1.8% |
-| `datasheet` | 302 | 69.1% |
-| `standard` | 127 | 29.1% |
+| `datasheet` | 303 | 69.2% |
+| `standard` | 127 | 29.0% |
 
 **By category:**
 
@@ -964,7 +964,7 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 
 **Specification:** Formlabs FLP12G01; technical data sheet V2 (2026-10-04)
 
-**Category:** `polymer` &nbsp;·&nbsp; **Catalog version:** 1.0.0 &nbsp;·&nbsp; **Last reviewed:** 2026-10-19
+**Category:** `polymer` &nbsp;·&nbsp; **Catalog version:** 1.0.0 &nbsp;·&nbsp; **Last reviewed:** 2026-10-25
 
 #### Structural
 
@@ -976,6 +976,12 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 | `ultimate_tensile` | 5.000e+07 Pa | Fuse 1; conditioned at 50% RH and 23 C for 48 hours | `datasheet` | Formlabs, 'Nylon 12 Powder' technical data sheet, FLP12G01, V2, 2026-10-04; https://formlabs.com/materials/tds/nylon-12-powder/ (read 202... |
 | `flexural_strength` | 6.600e+07 Pa | Fuse 1; conditioned at 50% RH and 23 C for 48 hours | `datasheet` | Formlabs, 'Nylon 12 Powder' technical data sheet, FLP12G01, V2, 2026-10-04; https://formlabs.com/materials/tds/nylon-12-powder/ (read 202... |
 | `density` | 990.0 kg/m^3 | Fuse 1; conditioned at 50% RH and 23 C for 48 hours | `datasheet` | Formlabs, 'Nylon 12 Powder' technical data sheet, FLP12G01, V2, 2026-10-04; https://formlabs.com/materials/tds/nylon-12-powder/ (read 202... |
+
+#### Thermal
+
+| Property | Value | Condition | Confidence | Source (head) |
+|---|---|---|---|---|
+| `thermal_expansion` | 1.180e-04 1/K | Fuse 1; conditioned at 50% RH and 23 C for 48 hours; reported temperature range -30 to 140 C | `datasheet` | Formlabs, 'Nylon 12 Powder' technical data sheet, FLP12G01, V2, 2026-10-04; https://formlabs.com/materials/tds/nylon-12-powder/ (read 202... |
 
 ### `kapton_hn`
 

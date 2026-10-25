@@ -1859,7 +1859,7 @@ tpu_elastollan_1195a = Material(
 _FORMLABS_NYLON12_V2 = (
     "Formlabs, 'Nylon 12 Powder' technical data sheet, FLP12G01, V2, "
     "2026-10-04; https://formlabs.com/materials/tds/nylon-12-powder/ "
-    "(read 2026-10-19)."
+    "(read 2026-10-25)."
 )
 _FORMLABS_NYLON12_CONDITION = "Fuse 1; conditioned at 50% RH and 23 C for 48 hours"
 
@@ -1869,7 +1869,7 @@ formlabs_nylon12_powder = Material(
     s_category="polymer",
     s_specification="Formlabs FLP12G01; technical data sheet V2 (2026-10-04)",
     s_catalog_version=_S_CATALOG_VERSION,
-    s_last_reviewed="2026-10-19",
+    s_last_reviewed="2026-10-25",
     structural=Structural(
         youngs_modulus=_PV(
             d_value=1.9e9,
@@ -1888,7 +1888,9 @@ formlabs_nylon12_powder = Material(
             s_notes=(
                 "No distinct yield or fatigue limit is published; both remain absent. "
                 "Elongation at break is 8% in X/Y and 5% in Z. Strength is not split by "
-                "orientation. Do not infer a vendor-approved isotropic or cyclic allowable."
+                "orientation. Do not infer a vendor-approved isotropic or cyclic allowable. "
+                "The source provides no sustained-load creep or bolt-preload relaxation "
+                "model. Short-duration tensile strength does not qualify either mechanism."
             ),
         ),
         flexural_strength=_PV(
@@ -1908,6 +1910,25 @@ formlabs_nylon12_powder = Material(
                 "This exact Formlabs grade does not inherit the EOS PA2200 density "
                 "or modulus in nylon12_sls. The older Formlabs Rev01 sheet listed "
                 "1.01 g/cm3; this entry follows the manufacturer's V2 revision."
+            ),
+        ),
+    ),
+    thermal=Thermal(
+        thermal_expansion=_PV(
+            d_value=118e-6,
+            s_units="1/K",
+            s_source=_FORMLABS_NYLON12_V2
+            + " Coefficient of thermal expansion 118 (micrometre/metre)/C, ASTM E 831-19.",
+            s_condition=_FORMLABS_NYLON12_CONDITION + "; reported temperature range -30 to 140 C",
+            s_confidence="datasheet",
+            s_notes=(
+                "Reported scalar over the stated range, not a temperature-dependent curve. "
+                "A temperature increment of one kelvin equals one degree Celsius. "
+                "The same TDS reports heat-deflection temperatures of 87 C at 1.8 MPa "
+                "and 171 C at 0.45 MPa (ASTM D648-16), and Vicat softening at 175 C "
+                "(ASTM D1525). These are separate loaded/softening tests, not continuous "
+                "service or melting temperatures; those catalog slots remain absent. "
+                "This value alone cannot predict a constrained polymer-to-metal fit."
             ),
         ),
     ),

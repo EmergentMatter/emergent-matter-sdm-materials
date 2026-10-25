@@ -12,9 +12,9 @@ One repo, one composed schema, one merged catalog spanning **structural + electr
 
 **Catalog status:** every `PropertyValue` in the catalog is **100% Tier 1** (vendor TDS / national standard / measured), gated by `tests/test_catalog_provenance_strength.py`: the build fails if any value slips through with weak metadata. CI runs the full suite on every push. See [`docs/catalog.md`](docs/catalog.md) for the exact material/property counts (auto-generated, always current) and `CHANGELOG.md` for what shipped recently.
 
-Includes a **consumer-safe structural strength resolver** (`get_structural_strength(material)` / `Structural.resolve_design_strength()` / `.d_design_strength_Pa` / `.s_strength_basis`) that returns a documented allowable (`yield_stress` → `ultimate_tensile`, else fails loud) plus its **basis**, so structural tools get a usable strength for materials like SLS PA12 (basis `ultimate_tensile`, 50 MPa) without faking a yield.
+Includes a **consumer-safe structural strength resolver** (`get_structural_strength(material)` / `Structural.resolve_design_strength()` / `.d_design_strength_Pa` / `.s_strength_basis`) that returns a documented strength scalar (`yield_stress` → `ultimate_tensile`, else fails loud) plus its **basis**, so structural tools can use materials like SLS PA12 without faking a yield. Consumers still define design margins and applicable load, temperature, creep and fatigue limits.
 
-For the exact Formlabs PA12 grade, use `get_material("formlabs_nylon12_powder")`. Its modulus, density, and strengths all cite the Formlabs FLP12G01 V2 datasheet. The broader `nylon12_sls` entry retains its existing sources. Neither entry invents a yield or fatigue limit.
+For the exact Formlabs PA12 grade, use `get_material("formlabs_nylon12_powder")`. Its modulus, density, strengths and thermal expansion cite the Formlabs FLP12G01 V2 datasheet. The broader `nylon12_sls` entry retains its existing sources. Neither entry invents a yield or fatigue limit. See [Fuse manufacturing guidance](#fuse-manufacturing-guidance) for printer-specific limits and finishing considerations.
 
 **Browse the catalog as a document:** see [`docs/catalog.md`](docs/catalog.md). Auto-generated from the Python source, it lists every material's properties + source citations + conditions + confidence levels in human-readable tables. Regenerate with `uv run python scripts/generate_catalog_doc.py`.
 
@@ -219,6 +219,40 @@ architecture decision records.
 and how it ages, rather than indexing it by filename. [STYLE.md](STYLE.md)
 and [CONTRIBUTING.md](CONTRIBUTING.md) cover house style and how a
 change ships.
+
+## Fuse manufacturing guidance
+
+These vendor guidelines apply to Formlabs Nylon 12 Powder on the Fuse 1 generation.
+They are manufacturing references, not intrinsic material properties or structural
+allowables. Checked 2026-10-25; confirm the actual printer and PreForm settings.
+
+| Feature | Manufacturer guidance |
+|---|---|
+| Supported or unsupported walls | Vertical 0.6 mm; horizontal 0.3 mm. Features at these limits can still distort. |
+| Pins or wires | Diameter at least 0.8 mm. |
+| Holes | Diameter at least 1.0 mm; provide cleaning access. |
+| Enclosed cavities | At least two powder exits, each at least 3.5 mm diameter. |
+| Separate mating parts | Clearance 0.2 mm for features below 20 mm²; 0.4 mm above 20 mm². |
+| Printed-in-place assemblies | Clearance 0.3 mm below 20 mm²; 0.6 mm above 20 mm². |
+| Independent parts in the build | Spacing 5 mm recommended; 1 mm minimum. |
+| Largest Nylon 12 part | 160.2 × 160.2 × 297.3 mm; XY chamber corners have 16 mm inner radius. Check fit in PreForm. |
+
+Source: [Formlabs Fuse design specifications](https://formlabs.com/support/Design-specifications-for-3D-models-Fuse-1/).
+The source does not assign the assembly-clearance category at exactly 20 mm².
+For accurate concentric bores, it recommends an undersized pilot followed by reaming.
+
+The manufacturer's [dimensional study](https://formlabs.com/white-papers/measuring-sls-dimensional-accuracy-and-print-repeatability/)
+reports an XY benchmark of ±max(0.3 mm, 0.5% of dimension). It measures witness
+parts and build variation; this is not a guarantee for a bearing seat, hole position
+or press fit. A tight-fit design needs a representative coupon, finishing allowance
+and inspection after the intended cleaning and conditioning. Matching nominal CAD
+diameters does not establish an interference fit.
+
+Keep machine calibration and shrink compensation in process configuration, outside
+`Material.manufacturing`. The material's thermal-expansion scalar does not define
+sintering shrinkage. Short-term strength and heat-deflection tests do not establish
+bolt-preload retention, bonded-insert pullout, fatigue life or continuous service
+temperature. Those require application-specific evidence.
 
 ## Consumers
 
