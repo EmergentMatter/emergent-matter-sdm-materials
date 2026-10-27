@@ -234,7 +234,7 @@ allowables. Checked 2026-10-25; confirm the actual printer and PreForm settings.
 | Enclosed cavities | At least two powder exits, each at least 3.5 mm diameter. |
 | Separate mating parts | Clearance 0.2 mm for features below 20 mm²; 0.4 mm above 20 mm². |
 | Printed-in-place assemblies | Clearance 0.3 mm below 20 mm²; 0.6 mm above 20 mm². |
-| Independent parts in the build | Spacing 5 mm recommended; 1 mm minimum. |
+| Independent parts in the build | Spacing 2 mm recommended; 1 mm minimum. |
 | Largest Nylon 12 part | 160.2 × 160.2 × 297.3 mm; XY chamber corners have 16 mm inner radius. Check fit in PreForm. |
 
 Source: [Formlabs Fuse design specifications](https://formlabs.com/support/Design-specifications-for-3D-models-Fuse-1/).
