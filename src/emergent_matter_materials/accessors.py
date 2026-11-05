@@ -112,6 +112,7 @@ _ALIASES: dict[str, str] = {
     "Stycast_2850FT": "stycast_2850ft",
     "TPU_95A":    "tpu_elastollan_1195a",   # Shore 96A / 48D per the BASF range table
     "Elastollan_1195A": "tpu_elastollan_1195a",
+    "Bambu_TPU_95A_HF": "tpu_95a_hf_bambu",
     "MW_PAI_200": "mw_pai_class_200",
     "MW_PUR_130": "mw_pur_class_130",
 

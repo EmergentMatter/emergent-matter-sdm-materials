@@ -79,7 +79,9 @@ c_p and max_op_temp confirmed not published by Carpenter (per v0.2.4
 notes); Metglas k and c_p confirmed not published in any primary
 bulletin; Metglas DC mu_max and scalar H_c confirmed published as
 BH-loop graphs only; VITROPERM E, sigma_y, UTS, fatigue, k, c_p
-confirmed product-page-only or unpublished per v0.2.8 notes.
+confirmed product-page-only or unpublished per v0.2.8 notes (2026-10-19:
+the product page's 150 GPa is a family-wide figure with the state unstated;
+still not stored).
 
 Other M19 properties have since been sourced; only
 structural.yield_stress remains unpopulated pending a primary source.
@@ -148,6 +150,13 @@ from emergent_matter_materials.property_value import PropertyValue as _PV
 from emergent_matter_materials.steinmetz import SteinmetzData as _Steinmetz
 from emergent_matter_materials.structural import Structural
 from emergent_matter_materials.thermal import Thermal
+
+_METGLAS_SDS = (
+    "Metglas Inc. Safety Data Sheet '2605 SA1, 2605 HB1M, 2605 SC and HB1M-LL', Version 1.01, "
+    "revised "
+    "03/12/2021, Section 9, retrieved 2026-10-16 from https://metglas.com/wp-content/uploads/2021/03/"
+    "2605-SA1-2605-HB1M-2605-SC-and-HB1M-LL_SDSFinal.pdf"
+)
 
 _S_CATALOG_VERSION = "1.0.0"
 
@@ -1673,7 +1682,7 @@ metglas_2605sa1 = Material(
         "A932/A932M-01 magnetic measurement conditions"
     ),
     s_catalog_version=_S_CATALOG_VERSION,
-    s_last_reviewed=_S_LAST_REVIEWED,
+    s_last_reviewed="2026-10-19",
     structural=Structural(
         ultimate_tensile=_PV(
             d_value=2.0e9,
@@ -1829,6 +1838,19 @@ metglas_2605sa1 = Material(
         ),
     ),
     thermal=Thermal(
+        melting_temp=_PV(
+            d_value=1180.0,
+            s_units="C",
+            s_source=_METGLAS_SDS + " -- Melting point 1180 C (2156 F)",
+            s_condition="melting point of the crystallized alloy, as stated on the SDS",
+            s_confidence="datasheet",
+            s_notes=(
+                "From a safety data sheet, one value for the four alloys it covers (2605 SA1, "
+                "HB1M, SC, HB1M-LL), not 2605SA1 alone. The amorphous structure is lost above "
+                "the crystallization temperature, about 510 C (Metglas 2605SA1 technical "
+                "bulletin, 2011), long before melting."
+            ),
+        ),
         curie_temp=_PV(
             d_value=399.0,
             s_units="C",
