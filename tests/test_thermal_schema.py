@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import pytest
 
+from emergent_matter_materials.property_table import PropertyTable
 from emergent_matter_materials.property_value import PropertyValue as PV
 from emergent_matter_materials.thermal import Thermal
 
@@ -88,3 +89,33 @@ def test_emissivity_below_0_rejected():
             **_req(),
             emissivity=PV(d_value=-0.1, s_units="", s_source="x", s_confidence="handbook"),
         )
+
+
+def _viscosity(d_value: float, s_units: str = "Pa*s") -> PV:
+    return PV(d_value=d_value, s_units=s_units, s_source="x", s_confidence="standard")
+
+
+def test_dynamic_viscosity_slot_accepts_pa_s():
+    t = Thermal(dynamic_viscosity=_viscosity(1.0016e-3))
+    assert t.d_dynamic_viscosity_Pa_s == pytest.approx(1.0016e-3)
+
+
+def test_dynamic_viscosity_in_centipoise_rejected():
+    with pytest.raises(ValueError, match="dynamic_viscosity: wrong units"):
+        Thermal(dynamic_viscosity=_viscosity(1.0016, s_units="cP"))
+
+
+def test_zero_dynamic_viscosity_rejected():
+    with pytest.raises(ValueError, match="dynamic_viscosity must be positive"):
+        Thermal(dynamic_viscosity=_viscosity(0.0))
+
+
+def test_dynamic_viscosity_table_row_must_be_positive():
+    table = PropertyTable.from_rows(
+        [(20.0, 1.0016e-3), (40.0, -1.0)],
+        s_units="Pa*s",
+        s_source="x",
+        s_confidence="standard",
+    )
+    with pytest.raises(ValueError, match="point at 40.0 C: dynamic_viscosity must be positive"):
+        Thermal(temperature_tables={"dynamic_viscosity": table})

@@ -81,6 +81,7 @@ _FIELD_ORDER = {
         "liquidus_temp",
         "latent_heat_fusion",
         "emissivity",
+        "dynamic_viscosity",
     ),
     "crystal_anisotropy": (
         # Cubic-trio first, then non-cubic constants, then crystallographic

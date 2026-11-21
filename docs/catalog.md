@@ -2,23 +2,23 @@
 
 **This document is auto-generated. Edit the Python catalog files, then regenerate with `uv run python scripts/generate_catalog_doc.py`. Do not hand-edit this file.**
 
-_Last generated: 2026-10-16 17:05 UTC_
+_Last generated: 2026-11-21 00:40 UTC_
 
 ---
 
 ## Summary
 
-**Catalog version:** `1.0.0` &nbsp;·&nbsp; **Package version:** `1.0.0`
+**Catalog version:** `1.1.0` &nbsp;·&nbsp; **Package version:** `1.1.0`
 
-**37 materials** &nbsp;·&nbsp; **433 PropertyValues** &nbsp;·&nbsp; **100% Tier 1**
+**38 materials** &nbsp;·&nbsp; **521 PropertyValues** &nbsp;·&nbsp; **100% Tier 1**
 
 **Confidence breakdown:**
 
 | `s_confidence` | Count | Share |
 |---|---:|---:|
-| `measured` | 8 | 1.8% |
-| `datasheet` | 298 | 68.8% |
-| `standard` | 127 | 29.3% |
+| `measured` | 8 | 1.5% |
+| `datasheet` | 298 | 57.2% |
+| `standard` | 215 | 41.3% |
 
 **By category:**
 
@@ -26,6 +26,7 @@ _Last generated: 2026-10-16 17:05 UTC_
 |---|---:|
 | `ceramic` | 2 |
 | `elastomer` | 1 |
+| `liquid` | 1 |
 | `magnet` | 8 |
 | `metal` | 9 |
 | `polymer` | 10 |
@@ -74,6 +75,7 @@ _Last generated: 2026-10-16 17:05 UTC_
 | `titanium_6al_4v` | metal | ASTM B348 Grade 5 / Ti-6Al-4V, annealed |
 | `tpu_elastollan_1195a` | elastomer | BASF Elastollan 1195 A 10 (11 Series polyether TPU, cylindrical granules, no lubricant)... |
 | `vitroperm_500f` | soft_magnetic | Vacuumschmelze VITROPERM 500 F nanocrystalline ribbon (Fe73.5Cu1Nb3Si13.5B9 / FINEMET-c... |
+| `water` | liquid | Ordinary water substance (H2O, CAS 7732-18-5), liquid at 0.101325 MPa, properties per t... |
 
 ---
 
@@ -94,6 +96,7 @@ _Last generated: 2026-10-16 17:05 UTC_
 | `C93200` | `c93200_bearing_bronze` |
 | `Cu` | `pure_copper` |
 | `Elastollan_1195A` | `tpu_elastollan_1195a` |
+| `H2O` | `water` |
 | `Hiperco` | `hiperco_50` |
 | `Kapton_HN` | `kapton_hn` |
 | `M19` | `m19_silicon_steel` |
@@ -236,6 +239,128 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 |---|---|---|---|---|
 | `ultimate_tensile` | 5.500e+07 Pa | 23 C, DIN 53504 S2 specimen, injection moulded | `datasheet` | BASF Polyurethanes GmbH, 'Thermoplastic Polyurethane Elastomers (TPU) Elastollan - Product Range' brochure (September 2016), 'Elastollan... |
 | `density` | 1150.0 kg/m^3 | 23 C, DIN EN ISO 1183-1-A | `datasheet` | BASF Polyurethanes GmbH, 'Thermoplastic Polyurethane Elastomers (TPU) Elastollan - Product Range' brochure (September 2016), 'Elastollan... |
+
+---
+
+### Category: `liquid`
+
+### `water`
+
+**Description:** Liquid water (ordinary water substance) at atmospheric pressure
+
+**Specification:** Ordinary water substance (H2O, CAS 7732-18-5), liquid at 0.101325 MPa, properties per the IAPWS-95, IAPWS 2008 viscosity and IAPWS 2011 thermal conductivity formulations as computed by NIST SRD 69
+
+**Category:** `liquid` &nbsp;·&nbsp; **Catalog version:** 1.1.0 &nbsp;·&nbsp; **Last reviewed:** 2026-11-20
+
+#### Structural
+
+**Strength basis:** none (no `yield_stress` or `ultimate_tensile`)
+
+| Property | Value | Condition | Confidence | Source (head) |
+|---|---|---|---|---|
+| `density` | 998.2 kg/m^3 | 20.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+
+**Temperature-dependent data**
+
+| Property | At | Value | Condition | Confidence | Source (head) |
+|---|---|---|---|---|---|
+| `density` | 0.01 C | 999.8 kg/m^3 | 0.01 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `density` | 5 C | 1000.0 kg/m^3 | 5.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `density` | 10 C | 999.7 kg/m^3 | 10.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `density` | 15 C | 999.1 kg/m^3 | 15.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `density` | 20 C | 998.2 kg/m^3 | 20.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `density` | 25 C | 997.0 kg/m^3 | 25.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `density` | 30 C | 995.6 kg/m^3 | 30.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `density` | 35 C | 994.0 kg/m^3 | 35.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `density` | 40 C | 992.2 kg/m^3 | 40.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `density` | 45 C | 990.2 kg/m^3 | 45.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `density` | 50 C | 988.0 kg/m^3 | 50.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `density` | 55 C | 985.7 kg/m^3 | 55.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `density` | 60 C | 983.2 kg/m^3 | 60.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `density` | 65 C | 980.6 kg/m^3 | 65.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `density` | 70 C | 977.8 kg/m^3 | 70.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `density` | 75 C | 974.8 kg/m^3 | 75.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `density` | 80 C | 971.8 kg/m^3 | 80.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `density` | 85 C | 968.6 kg/m^3 | 85.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `density` | 90 C | 965.3 kg/m^3 | 90.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `density` | 95 C | 961.9 kg/m^3 | 95.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `density` | 99.9743 C | 958.4 kg/m^3 | 99.9743 C, 0.101325 MPa, saturated liquid at the normal boiling point (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+
+#### Thermal
+
+| Property | Value | Condition | Confidence | Source (head) |
+|---|---|---|---|---|
+| `thermal_conductivity` | 0.598012 W/(m*K) | 20.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `specific_heat` | 4184.1 J/(kg*K) | 20.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `dynamic_viscosity` | 0.0010016 Pa*s | 20.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+
+**Temperature-dependent data**
+
+| Property | At | Value | Condition | Confidence | Source (head) |
+|---|---|---|---|---|---|
+| `thermal_conductivity` | 0.01 C | 0.555675 W/(m*K) | 0.01 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `thermal_conductivity` | 5 C | 0.567794 W/(m*K) | 5.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `thermal_conductivity` | 10 C | 0.578777 W/(m*K) | 10.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `thermal_conductivity` | 15 C | 0.588802 W/(m*K) | 15.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `thermal_conductivity` | 20 C | 0.598012 W/(m*K) | 20.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `thermal_conductivity` | 25 C | 0.606516 W/(m*K) | 25.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `thermal_conductivity` | 30 C | 0.614392 W/(m*K) | 30.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `thermal_conductivity` | 35 C | 0.6217 W/(m*K) | 35.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `thermal_conductivity` | 40 C | 0.628486 W/(m*K) | 40.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `thermal_conductivity` | 45 C | 0.634783 W/(m*K) | 45.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `thermal_conductivity` | 50 C | 0.640621 W/(m*K) | 50.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `thermal_conductivity` | 55 C | 0.646021 W/(m*K) | 55.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `thermal_conductivity` | 60 C | 0.651 W/(m*K) | 60.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `thermal_conductivity` | 65 C | 0.655575 W/(m*K) | 65.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `thermal_conductivity` | 70 C | 0.659758 W/(m*K) | 70.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `thermal_conductivity` | 75 C | 0.663561 W/(m*K) | 75.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `thermal_conductivity` | 80 C | 0.666994 W/(m*K) | 80.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `thermal_conductivity` | 85 C | 0.670067 W/(m*K) | 85.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `thermal_conductivity` | 90 C | 0.672789 W/(m*K) | 90.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `thermal_conductivity` | 95 C | 0.675167 W/(m*K) | 95.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `thermal_conductivity` | 99.9743 C | 0.677201 W/(m*K) | 99.9743 C, 0.101325 MPa, saturated liquid at the normal boiling point (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `specific_heat` | 0.01 C | 4219.4 J/(kg*K) | 0.01 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `specific_heat` | 5 C | 4205.0 J/(kg*K) | 5.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `specific_heat` | 10 C | 4195.2 J/(kg*K) | 10.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `specific_heat` | 15 C | 4188.5 J/(kg*K) | 15.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `specific_heat` | 20 C | 4184.1 J/(kg*K) | 20.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `specific_heat` | 25 C | 4181.3 J/(kg*K) | 25.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `specific_heat` | 30 C | 4179.8 J/(kg*K) | 30.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `specific_heat` | 35 C | 4179.3 J/(kg*K) | 35.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `specific_heat` | 40 C | 4179.4 J/(kg*K) | 40.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `specific_heat` | 45 C | 4180.1 J/(kg*K) | 45.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `specific_heat` | 50 C | 4181.3 J/(kg*K) | 50.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `specific_heat` | 55 C | 4183.0 J/(kg*K) | 55.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `specific_heat` | 60 C | 4184.9 J/(kg*K) | 60.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `specific_heat` | 65 C | 4187.3 J/(kg*K) | 65.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `specific_heat` | 70 C | 4190.1 J/(kg*K) | 70.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `specific_heat` | 75 C | 4193.2 J/(kg*K) | 75.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `specific_heat` | 80 C | 4196.8 J/(kg*K) | 80.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `specific_heat` | 85 C | 4200.7 J/(kg*K) | 85.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `specific_heat` | 90 C | 4205.2 J/(kg*K) | 90.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `specific_heat` | 95 C | 4210.2 J/(kg*K) | 95.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `specific_heat` | 99.9743 C | 4215.6 J/(kg*K) | 99.9743 C, 0.101325 MPa, saturated liquid at the normal boiling point (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `dynamic_viscosity` | 0.01 C | 0.00179113 Pa*s | 0.01 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `dynamic_viscosity` | 5 C | 0.00151817 Pa*s | 5.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `dynamic_viscosity` | 10 C | 0.0013059 Pa*s | 10.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `dynamic_viscosity` | 15 C | 0.00113757 Pa*s | 15.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `dynamic_viscosity` | 20 C | 0.0010016 Pa*s | 20.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `dynamic_viscosity` | 25 C | 8.900e-04 Pa*s | 25.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `dynamic_viscosity` | 30 C | 7.972e-04 Pa*s | 30.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `dynamic_viscosity` | 35 C | 7.191e-04 Pa*s | 35.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `dynamic_viscosity` | 40 C | 6.527e-04 Pa*s | 40.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `dynamic_viscosity` | 45 C | 5.958e-04 Pa*s | 45.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `dynamic_viscosity` | 50 C | 5.465e-04 Pa*s | 50.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `dynamic_viscosity` | 55 C | 5.036e-04 Pa*s | 55.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `dynamic_viscosity` | 60 C | 4.660e-04 Pa*s | 60.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `dynamic_viscosity` | 65 C | 4.329e-04 Pa*s | 65.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `dynamic_viscosity` | 70 C | 4.035e-04 Pa*s | 70.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `dynamic_viscosity` | 75 C | 3.774e-04 Pa*s | 75.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `dynamic_viscosity` | 80 C | 3.541e-04 Pa*s | 80.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `dynamic_viscosity` | 85 C | 3.331e-04 Pa*s | 85.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `dynamic_viscosity` | 90 C | 3.142e-04 Pa*s | 90.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `dynamic_viscosity` | 95 C | 2.971e-04 Pa*s | 95.0 C, 0.101325 MPa, liquid (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
+| `dynamic_viscosity` | 99.9743 C | 2.817e-04 Pa*s | 99.9743 C, 0.101325 MPa, saturated liquid at the normal boiling point (NIST Phase column: liquid) | `standard` | NIST Chemistry WebBook, NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems', water (CAS 7732-18-5), isobari... |
 
 ---
 

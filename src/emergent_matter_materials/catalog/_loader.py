@@ -45,6 +45,7 @@ def load_all() -> None:
     # data file needs to reference accessors for any reason).
     from emergent_matter_materials.catalog import (
         ceramics,
+        liquids,
         magnets,
         metals,
         polymers,
@@ -56,6 +57,7 @@ def load_all() -> None:
     _merge("catalog.magnets", magnets.CATALOG)
     _merge("catalog.soft_magnetic", soft_magnetic.CATALOG)
     _merge("catalog.ceramics", ceramics.CATALOG)
+    _merge("catalog.liquids", liquids.CATALOG)
 
 
 __all__ = ["load_all"]

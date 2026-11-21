@@ -41,6 +41,11 @@ group's values must also walk its table rows and flow points:
 and `scripts/generate_catalog_doc.py` already do. A walker that skips them
 lets an unsourced row ship.
 
+When an entry is copied from a fetched source file (NIST WebBook data for
+`water`), the raw response is saved verbatim under `data/` with a
+`SOURCE.json` giving the query URL, retrieval time and SHA-256, and a test
+checks every catalogued number against the file.
+
 A downstream entry built on a catalog material uses `derive_material`
 (`derivation.py`), never a copy: inherited values stay the base's objects,
 each override carries a reason, and the derived entry always gets a new id.
