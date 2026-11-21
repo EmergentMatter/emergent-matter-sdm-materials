@@ -69,6 +69,7 @@ MATERIALS: dict[str, Material] = {}
 _ALIASES: dict[str, str] = {
     # ── Unambiguous (pure forms; only one canonical material)
     "Cu":         "pure_copper",
+    "H2O":        "water",       # liquid water; the catalog has no ice or steam entry
     # "Fe" intentionally not registered: pure iron isn't in v0.1.0 catalog,
     # and the Fe alloys in the catalog are M19/M270/Hiperco/4140 which each
     # carry their own grade-disambiguating canonical names.
@@ -200,6 +201,7 @@ _PROPERTY_MAP: dict[str, tuple[str, str]] = {
     "T_liquidus":   ("thermal", "liquidus_temp"),
     "L_fusion":     ("thermal", "latent_heat_fusion"),
     "emissivity":   ("thermal", "emissivity"),
+    "mu_dyn":       ("thermal", "dynamic_viscosity"),
     # ── Crystal anisotropy (v0.4.0)
     "C11":          ("crystal_anisotropy", "c11"),
     "C12":          ("crystal_anisotropy", "c12"),

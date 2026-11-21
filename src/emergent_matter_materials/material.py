@@ -62,6 +62,7 @@ MaterialCategory = Literal[
     "elastomer",
     "magnet",  # permanent-magnet alloys (NdFeB, ferrite, AlNiCo)
     "soft_magnetic",  # core materials (silicon steel, Hiperco, MnZn ferrite)
+    "liquid",  # liquid over the tabulated range (coolants, working fluids)
 ]
 
 #: Runtime counterpart of `MaterialCategory`, derived with `get_args()` so it

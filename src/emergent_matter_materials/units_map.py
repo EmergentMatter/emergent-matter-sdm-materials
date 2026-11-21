@@ -78,6 +78,7 @@ _PROPERTY_EXPECTED_UNITS: dict[str, str] = {
     "liquidus_temp":             "C",
     "latent_heat_fusion":        "J/kg",
     "emissivity":                "",            # dimensionless
+    "dynamic_viscosity":         "Pa*s",        # liquids; shear viscosity
     # ── Manufacturing (per-ProcessFit) ────────────────────────────────
     "shrinkage_linear":          "",            # dimensionless fraction
     "min_wall_thickness":        "m",

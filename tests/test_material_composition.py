@@ -64,7 +64,7 @@ def test_empty_description_rejected():
 
 def test_invalid_category_rejected():
     with pytest.raises(ValueError, match="s_category must be one of"):
-        _ok_material(s_category="liquid")  # type: ignore[arg-type]
+        _ok_material(s_category="plasma")  # type: ignore[arg-type]
 
 
 def test_all_valid_categories_accepted():
