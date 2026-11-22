@@ -19,10 +19,11 @@ fields and N/A-by-physics gaps explained in s_notes:
 
 Deleted in v0.2.0, and still awaiting a Tier-1 source:
 - tpu_95a: all values were MatWeb-aggregated
-- petg_fdm: aggregator + Tier-2 paper
+- petg_fdm: aggregator + Tier-2 paper (restored as petg_3dprint, below; petg_fdm itself stays gone)
 
 Restored as Tier-1 in v0.5.0:
 - pla_3dprint: Prusament PLA (Prusa Polymers a.s.) TDS, Feb 2022
+- petg_3dprint: Prusament PETG (Prusa Polymers a.s.) TDS, replaces the deleted petg_fdm
 
 v0.6.0 sweep (this revision): Tier-1 fields restored from
 already-cited primary sources:
