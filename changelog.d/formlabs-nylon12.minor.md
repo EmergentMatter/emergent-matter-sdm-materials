@@ -1,0 +1,1 @@
+Add the exact Formlabs Nylon 12 Powder FLP12G01 grade with V2 manufacturer provenance for tensile modulus, strength, flexural strength, printed density, and thermal expansion. Keep unpublished yield, fatigue, Poisson ratio, creep, and service-temperature limits absent. Document Fuse printing and finishing guidance separately from intrinsic material properties.

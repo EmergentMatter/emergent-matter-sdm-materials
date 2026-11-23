@@ -2,7 +2,7 @@
 
 **This document is auto-generated. Edit the Python catalog files, then regenerate with `uv run python scripts/generate_catalog_doc.py`. Do not hand-edit this file.**
 
-_Last generated: 2026-10-16 17:05 UTC_
+_Last generated: 2026-10-25 21:39 UTC_
 
 ---
 
@@ -10,15 +10,15 @@ _Last generated: 2026-10-16 17:05 UTC_
 
 **Catalog version:** `1.0.0` &nbsp;·&nbsp; **Package version:** `1.0.0`
 
-**37 materials** &nbsp;·&nbsp; **433 PropertyValues** &nbsp;·&nbsp; **100% Tier 1**
+**38 materials** &nbsp;·&nbsp; **438 PropertyValues** &nbsp;·&nbsp; **100% Tier 1**
 
 **Confidence breakdown:**
 
 | `s_confidence` | Count | Share |
 |---|---:|---:|
 | `measured` | 8 | 1.8% |
-| `datasheet` | 298 | 68.8% |
-| `standard` | 127 | 29.3% |
+| `datasheet` | 303 | 69.2% |
+| `standard` | 127 | 29.0% |
 
 **By category:**
 
@@ -28,7 +28,7 @@ _Last generated: 2026-10-16 17:05 UTC_
 | `elastomer` | 1 |
 | `magnet` | 8 |
 | `metal` | 9 |
-| `polymer` | 10 |
+| `polymer` | 11 |
 | `soft_magnetic` | 7 |
 
 ---
@@ -43,6 +43,7 @@ _Last generated: 2026-10-16 17:05 UTC_
 | `aluminum_1350_ec` | metal | Aluminium 1350 (EC grade), 61.0% IACS per IEC 60889 (equiv. ASTM B230 wire / B233 redra... |
 | `aluminum_6061_t6` | metal | AA 6061-T6 (solution heat-treated + artificially aged) |
 | `c93200_bearing_bronze` | metal | UNS C93200 / SAE 660 high-leaded tin bronze (Cu 81-85, Sn 6.3-7.5, Pb 6-8, Zn 1-4 wt%),... |
+| `formlabs_nylon12_powder` | polymer | Formlabs FLP12G01; technical data sheet V2 (2026-10-04) |
 | `hiperco_50` | soft_magnetic | Carpenter Hiperco 50 / ASTM A801 Alloy Type 1 / MIL A 47182, 0.014 in (0.355 mm) strip,... |
 | `kapton_hn` | polymer | DuPont Kapton HN polyimide film, 25 um / 1 mil nominal gauge (product specification H-3... |
 | `m19_silicon_steel` | soft_magnetic | Cleveland-Cliffs (formerly AK Steel) DI-MAX M-19, ASTM A677 grade 36F155, 29 gauge (0.0... |
@@ -956,6 +957,31 @@ Properties are listed only when a Tier-1 primary source exists. Missing fields (
 ---
 
 ### Category: `polymer`
+
+### `formlabs_nylon12_powder`
+
+**Description:** Formlabs Nylon 12 Powder, selective laser sintered PA12
+
+**Specification:** Formlabs FLP12G01; technical data sheet V2 (2026-10-04)
+
+**Category:** `polymer` &nbsp;·&nbsp; **Catalog version:** 1.0.0 &nbsp;·&nbsp; **Last reviewed:** 2026-10-25
+
+#### Structural
+
+**Strength basis:** `ultimate_tensile` &nbsp;·&nbsp; 50.0 MPa &nbsp;·&nbsp; the design allowable `get_structural_strength()` returns
+
+| Property | Value | Condition | Confidence | Source (head) |
+|---|---|---|---|---|
+| `youngs_modulus` | 1.900e+09 Pa | Fuse 1; conditioned at 50% RH and 23 C for 48 hours | `datasheet` | Formlabs, 'Nylon 12 Powder' technical data sheet, FLP12G01, V2, 2026-10-04; https://formlabs.com/materials/tds/nylon-12-powder/ (read 202... |
+| `ultimate_tensile` | 5.000e+07 Pa | Fuse 1; conditioned at 50% RH and 23 C for 48 hours | `datasheet` | Formlabs, 'Nylon 12 Powder' technical data sheet, FLP12G01, V2, 2026-10-04; https://formlabs.com/materials/tds/nylon-12-powder/ (read 202... |
+| `flexural_strength` | 6.600e+07 Pa | Fuse 1; conditioned at 50% RH and 23 C for 48 hours | `datasheet` | Formlabs, 'Nylon 12 Powder' technical data sheet, FLP12G01, V2, 2026-10-04; https://formlabs.com/materials/tds/nylon-12-powder/ (read 202... |
+| `density` | 990.0 kg/m^3 | Fuse 1; conditioned at 50% RH and 23 C for 48 hours | `datasheet` | Formlabs, 'Nylon 12 Powder' technical data sheet, FLP12G01, V2, 2026-10-04; https://formlabs.com/materials/tds/nylon-12-powder/ (read 202... |
+
+#### Thermal
+
+| Property | Value | Condition | Confidence | Source (head) |
+|---|---|---|---|---|
+| `thermal_expansion` | 1.180e-04 1/K | Fuse 1; conditioned at 50% RH and 23 C for 48 hours; reported temperature range -30 to 140 C | `datasheet` | Formlabs, 'Nylon 12 Powder' technical data sheet, FLP12G01, V2, 2026-10-04; https://formlabs.com/materials/tds/nylon-12-powder/ (read 202... |
 
 ### `kapton_hn`
 
