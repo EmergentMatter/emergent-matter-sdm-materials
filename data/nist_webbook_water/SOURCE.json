@@ -1,0 +1,39 @@
+{
+  "description": "Raw responses from the NIST Chemistry WebBook fluid property service (NIST Standard Reference Database 69, 'Thermophysical Properties of Fluid Systems'), saved byte for byte. The water entry in src/emergent_matter_materials/catalog/liquids.py is copied from these files, and tests/test_water_nist_webbook.py checks every catalogued number against them.",
+  "fluid": "Water (CAS 7732-18-5), NIST ID C7732185",
+  "query_type": "Isobaric properties (Type=IsoBar)",
+  "pressure": "0.101325 MPa",
+  "retrieved_utc": "2026-11-21T00:36:31Z",
+  "retrieved_note": "Retrieval time is the HTTP Date header of the responses.",
+  "units": {
+    "Temperature (C)": "degrees Celsius",
+    "Pressure (MPa)": "MPa",
+    "Density (kg/m3)": "kg/m^3",
+    "Cp (J/g*K)": "J/(g*K); the catalog stores J/(kg*K), multiplied by 1000",
+    "Viscosity (Pa*s)": "Pa*s",
+    "Therm. Cond. (W/m*K)": "W/(m*K)"
+  },
+  "formulations": {
+    "Equation of state (density, Cp)": "Wagner, W.; Pruss, A., The IAPWS Formulation 1995 for the Thermodynamic Properties of Ordinary Water Substance for General and Scientific Use, J. Phys. Chem. Ref. Data, 2002, 31, 2, 387-535, https://doi.org/10.1063/1.1461829. IAPWS R6-95, Revised Release on the IAPWS Formulation 1995, 2016.",
+    "Viscosity": "Huber, M.L. et al., New International Formulation for the Viscosity of H2O, J. Phys. Chem. Ref. Data, 2009, 38, 2, 101-125, https://doi.org/10.1063/1.3088050. IAPWS Release on the IAPWS Formulation 2008 for the Viscosity of Ordinary Water Substance.",
+    "Thermal conductivity": "Huber, M.L. et al., New International Formulation for the Thermal Conductivity of H2O, J. Phys. Chem. Ref. Data, 2012, 41, 3, 033102, https://doi.org/10.1063/1.4738955. IAPWS Release on the IAPWS Formulation 2011 for the Thermal Conductivity of Ordinary Water Substance."
+  },
+  "uncertainty_as_stated_by_nist": {
+    "Density": "0.0001% at 1 atm in the liquid phase",
+    "Cp": "0.1% in the liquid",
+    "Viscosity": "Not stated on the results page; NIST refers to the IAPWS release or the cited publication",
+    "Thermal conductivity": "Not stated on the results page; NIST refers to the IAPWS release or the cited publication"
+  },
+  "files": {
+    "water_isobar_0.101325MPa_0C_to_100C.tsv": {
+      "url": "https://webbook.nist.gov/cgi/fluid.cgi?Action=Data&Wide=on&ID=C7732185&Type=IsoBar&Digits=6&P=0.101325&THigh=100&TLow=0&TInc=5&RefState=DEF&TUnit=C&PUnit=MPa&DUnit=kg%2Fm3&HUnit=kJ%2Fkg&WUnit=m%2Fs&VisUnit=Pa*s&STUnit=N%2Fm",
+      "sha256": "e88f709cc238fa2d47075b80d796d69451413cc8daab02efd7e4a0fcc43eadef",
+      "used_for": "The 0.01 C row only. NIST's isobar starts at the triple point (0.01 C), so a 0 C start returns 0.01 C and then a grid offset by 0.01 C."
+    },
+    "water_isobar_0.101325MPa_5C_to_100C.tsv": {
+      "url": "https://webbook.nist.gov/cgi/fluid.cgi?Action=Data&Wide=on&ID=C7732185&Type=IsoBar&Digits=6&P=0.101325&THigh=100&TLow=5&TInc=5&RefState=DEF&TUnit=C&PUnit=MPa&DUnit=kg%2Fm3&HUnit=kJ%2Fkg&WUnit=m%2Fs&VisUnit=Pa*s&STUnit=N%2Fm",
+      "sha256": "565aa886ca53707c55052334cca2459a8b50b57aa514527376df16439d1a7f8a",
+      "used_for": "Every liquid row, 5 C to 99.9743 C (saturated liquid at the normal boiling point). The vapor rows after it are not used."
+    }
+  }
+}

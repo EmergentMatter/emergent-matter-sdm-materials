@@ -7,6 +7,11 @@ material, plus five optional fields populated where the data exists:
 ``curie_temp`` (ferromagnetics: full demag above this point),
 ``melting_temp``, ``emissivity``.
 
+``dynamic_viscosity`` is here for liquids (``s_category="liquid"``).
+It is a transport property like conductivity, and a flow solver reads it
+next to conductivity and specific heat, so it sits in the same group
+rather than in a group of its own. Solids leave it ``None``.
+
 The three required fields are what a winding thermal model needs at
 minimum: conduction to dissipate winding I²R, heat capacity for
 transient temp rise, and a temperature ceiling.
@@ -47,6 +52,7 @@ _THERMAL_SCALAR_FIELDS: frozenset[str] = frozenset(
         "liquidus_temp",
         "latent_heat_fusion",
         "emissivity",
+        "dynamic_viscosity",
     }
 )
 
@@ -63,6 +69,7 @@ _THERMAL_TABLE_SLOTS: Mapping[str, str] = MappingProxyType(
             "thermal_expansion",
             "thermal_expansion_perpendicular",
             "emissivity",
+            "dynamic_viscosity",
         )
     }
 )
@@ -99,6 +106,9 @@ class Thermal:
     solidus_temp: PropertyValue | None = None
     liquidus_temp: PropertyValue | None = None
     latent_heat_fusion: PropertyValue | None = None  # J/kg
+    # Pa*s, shear (dynamic) viscosity of a liquid. Declared after the existing
+    # scalar slots so their positional construction keeps its meaning.
+    dynamic_viscosity: PropertyValue | None = None
     # Temperature dependence of the scalar slots above, keyed by slot name
     # (e.g. "thermal_conductivity"). See property_table.py.
     temperature_tables: Mapping[str, PropertyTable] = field(default_factory=PropertyTableMap)
@@ -144,6 +154,10 @@ class Thermal:
             raise ValueError(
                 f"max_operating_temp = {self.max_operating_temp.d_value} C "
                 f"is below absolute zero; check the source citation."
+            )
+        if self.dynamic_viscosity is not None and self.dynamic_viscosity.d_value <= 0.0:
+            raise ValueError(
+                f"dynamic_viscosity must be positive, got {self.dynamic_viscosity.d_value}"
             )
         if self.emissivity is not None and not (0.0 <= self.emissivity.d_value <= 1.0):
             raise ValueError(f"emissivity must be in [0, 1], got {self.emissivity.d_value}")
@@ -206,6 +220,10 @@ class Thermal:
     @property
     def d_emissivity(self) -> float:
         return self._req("emissivity").d_value
+
+    @property
+    def d_dynamic_viscosity_Pa_s(self) -> float:
+        return self._req("dynamic_viscosity").d_value
 
     def table(self, s_field_name: str) -> PropertyTable:
         """The temperature table for a scalar slot; raises if none is attached."""
